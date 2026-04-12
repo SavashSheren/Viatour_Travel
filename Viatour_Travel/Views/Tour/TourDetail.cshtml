@@ -1,0 +1,924 @@
+﻿@model Viatour_Travel.Dtos.TourDtos.GetTourDetailDto
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Viatour_Travel.SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["TourDetail"];
+    Layout = "~/Views/Shared/_TourLayout.cshtml";
+
+    var images = Model?.TourImages ?? new List<Viatour_Travel.Dtos.TourImageDtos.ResultTourImageDto>();
+    var plans = (Model?.TourPlans ?? new List<Viatour_Travel.Dtos.TourDtos.TourPlanDto>())
+        .OrderBy(x => x.DayNumber)
+        .ToList();
+
+    var reviews = Model?.Reviews ?? new List<Viatour_Travel.Dtos.ReviewDtos.ResultReviewByTourIdDto>();
+
+    var firstTourImage = images.FirstOrDefault()?.ImageUrl;
+
+    var coverImage = !string.IsNullOrWhiteSpace(firstTourImage)
+        ? firstTourImage
+        : !string.IsNullOrWhiteSpace(Model?.CoverImageUrl)
+            ? Model.CoverImageUrl
+            : "/vitour/assets/images/travel-list/2.jpg";
+
+    var mapImage = !string.IsNullOrWhiteSpace(Model?.MapLocationImageUrl)
+        ? Model.MapLocationImageUrl
+        : coverImage;
+
+    var activeReviews = reviews
+        .Where(x => x.Status)
+        .OrderByDescending(x => x.ReviewDate)
+        .ToList();
+
+    var totalReview = activeReviews.Count;
+    var avgScore = totalReview > 0 ? activeReviews.Average(x => x.Score) : 0;
+    var roundedAvgScore = (int)Math.Round(avgScore);
+
+    string GetPlanTitle(Viatour_Travel.Dtos.TourDtos.TourPlanDto plan)
+    {
+        if (!string.IsNullOrWhiteSpace(plan.Title))
+            return plan.Title;
+
+        return $"{plan.DayNumber}. {Localizer["Day"]}";
+    }
+}
+
+@if (Model == null)
+{
+    <section class="tour-single">
+        <div class="tf-container">
+            <div class="content-card">
+                <h2>@Localizer["TourNotFound"]</h2>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="tour-single style-modern">
+        <div class="tf-container">
+
+            <div class="tour-hero-banner mb-40" style="background-image:url('@coverImage');">
+                <div class="tour-hero-overlay"></div>
+
+                <div class="tour-hero-content">
+                    <div class="row align-items-end">
+                        <div class="col-lg-8">
+                            <div class="tour-detail-heading hero-text">
+                                <span class="feature">
+                                    @(!string.IsNullOrWhiteSpace(Model.Badge) ? Model.Badge : Localizer["Featured"])
+                                </span>
+
+                                <h1 class="title">@Model.TourTitle</h1>
+
+                                <ul class="flex-three list-wrap-heading">
+                                    <li class="flex-three">
+                                        <i class="icon-time-left"></i>
+                                        <span>@Model.DayCount @Localizer["Day"]</span>
+                                    </li>
+                                    <li class="flex-three">
+                                        <i class="icon-user"></i>
+                                        <span>@Localizer["Maximum"] @Model.Capacity @Localizer["Person"]</span>
+                                    </li>
+                                    <li class="flex-three">
+                                        <i class="icon-18"></i>
+                                        <span>@Model.Location</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="tour-detail-price-box hero-price-box">
+                                <div class="start mb-10">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        if (i < roundedAvgScore)
+                                        {
+                                            <i class="icon-Star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon-Star" style="opacity:.35"></i>
+                                        }
+                                    }
+                                    <span class="review">(@totalReview @Localizer["Review"])</span>
+                                </div>
+
+                                <p class="price-sale text-main">
+                                    $@Model.Price
+                                    <span class="price">$@Model.Price</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (images.Count > 1)
+            {
+                <div class="row mb-40 image-gallery-single">
+                    @foreach (var item in images.Skip(1).Take(3))
+                    {
+                        <div class="col-6 col-sm-4">
+                            <img src="@item.ImageUrl"
+                                 alt="@Localizer["TourImage"]"
+                                 style="width:100%; height:220px; object-fit:cover; border-radius:16px;">
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav tab-tour-single modern-tabs" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active"
+                                    id="pills-information-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-information"
+                                    type="button"
+                                    role="tab">
+                                <i class="icon-Vector-51"></i> @Localizer["Overview"]
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="pills-tour-planing-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-tour-planing"
+                                    type="button"
+                                    role="tab">
+                                <i class="icon-destination-2-1"></i> @Localizer["Program"]
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="pills-shot-gallery-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-shot-gallery"
+                                    type="button"
+                                    role="tab">
+                                <i class="icon-image-gallery-1"></i> @Localizer["Gallery"]
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="pills-location-share-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-location-share"
+                                    type="button"
+                                    role="tab">
+                                <i class="icon-map-1"></i> @Localizer["Map"]
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="pills-reviews-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-reviews"
+                                    type="button"
+                                    role="tab">
+                                <i class="icon-favourite-1"></i> @Localizer["Reviews"]
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row pd-main">
+                <div class="col-lg-8">
+                    <div class="tab-content" id="pills-tabContent">
+
+                        <!-- Overview -->
+                        <div class="tab-pane fade show active" id="pills-information" role="tabpanel">
+                            <div class="content-card mb-30">
+                                <h3 class="section-title">@Localizer["Description"]</h3>
+                                <p class="des">@Model.TourDescription</p>
+                            </div>
+
+                            <div class="content-card mb-30">
+                                <h3 class="section-title">@Localizer["TourInformation"]</h3>
+
+                                <div class="expect flex-three">
+                                    <span>@Localizer["Location"]</span>
+                                    <p>@Model.Location</p>
+                                </div>
+
+                                <div class="expect flex-three">
+                                    <span>@Localizer["TourDuration"]</span>
+                                    <p>@Model.DayCount @Localizer["Day"]</p>
+                                </div>
+
+                                <div class="expect flex-three">
+                                    <span>@Localizer["MaximumCapacity"]</span>
+                                    <p>@Model.Capacity @Localizer["Person"]</p>
+                                </div>
+
+                                <div class="expect flex-three">
+                                    <span>@Localizer["Price"]</span>
+                                    <p>$@Model.Price</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program -->
+                        <div class="tab-pane fade" id="pills-tour-planing" role="tabpanel">
+                            <div class="content-card">
+                                <h3 class="section-title">@Localizer["DailyTourProgram"]</h3>
+
+                                @if (plans.Any())
+                                {
+                                    <div class="custom-tour-accordion">
+                                        @for (int i = 0; i < plans.Count; i++)
+                                        {
+                                            var item = plans[i];
+                                            var collapseId = $"planCollapse_{i}";
+                                            var headingId = $"planHeading_{i}";
+                                            var isFirst = i == 0;
+                                            var planTitle = GetPlanTitle(item);
+
+                                            <div class="tour-accordion-item">
+                                                <div class="tour-accordion-header @(isFirst ? "active" : "")"
+                                                     data-bs-toggle="collapse"
+                                                     data-bs-target="#@collapseId"
+                                                     aria-expanded="@(isFirst.ToString().ToLower())"
+                                                     aria-controls="@collapseId"
+                                                     id="@headingId">
+
+                                                    <div class="tour-day-badge">
+                                                        @item.DayNumber @Localizer["Day"]
+                                                    </div>
+
+                                                    <div class="tour-day-title">
+                                                        @planTitle
+                                                    </div>
+
+                                                    <div class="tour-day-icon">
+                                                        <i class="icon-29"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div id="@collapseId"
+                                                     class="collapse @(isFirst ? "show" : "")"
+                                                     aria-labelledby="@headingId">
+                                                    <div class="tour-accordion-body">
+                                                        @item.Description
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="des">@Localizer["NoPlanAddedForThisTourYet"]</p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Gallery -->
+                        <div class="tab-pane fade" id="pills-shot-gallery" role="tabpanel">
+                            <div class="content-card">
+                                <h3 class="section-title">@Localizer["Gallery"]</h3>
+
+                                @if (images.Any())
+                                {
+                                    <div class="gallery-content-tour custom-gallery-grid">
+                                        @foreach (var item in images)
+                                        {
+                                            <div class="image">
+                                                <img src="@item.ImageUrl"
+                                                     alt="@Localizer["TourGalleryImage"]"
+                                                     class="gallery-item-img">
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="des">@Localizer["NoGalleryImagesAddedForThisTourYet"]</p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Map -->
+                        <div class="tab-pane fade" id="pills-location-share" role="tabpanel">
+                            <div class="content-card map-card-modern">
+                                <div class="map-card-header">
+                                    <div>
+                                        <span class="map-badge">AI Illustrated Route</span>
+                                        <h3 class="section-title mb-8">@Localizer["MapLocation"]</h3>
+                                        <p class="map-subtitle">
+                                            @Model.TourTitle - @Model.Location
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="tour-map-image-wrapper">
+                                    <img src="@mapImage"
+                                         alt="@($"{Model.TourTitle} Map")"
+                                         class="tour-map-image"
+                                         onerror="this.onerror=null;this.src='@coverImage';" />
+                                </div>
+
+                                <div class="map-info-box">
+                                    <div class="map-info-item">
+                                        <span class="map-info-label">@Localizer["Location"]</span>
+                                        <strong>@Model.Location</strong>
+                                    </div>
+
+                                    <div class="map-info-item">
+                                        <span class="map-info-label">@Localizer["TourDuration"]</span>
+                                        <strong>@Model.DayCount @Localizer["Day"]</strong>
+                                    </div>
+
+                                    <div class="map-info-item">
+                                        <span class="map-info-label">@Localizer["MaximumCapacity"]</span>
+                                        <strong>@Model.Capacity @Localizer["Person"]</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews -->
+                        <div class="tab-pane fade" id="pills-reviews" role="tabpanel">
+                            <div class="content-card">
+                                <h3 class="section-title">@Localizer["Reviews"]</h3>
+
+                                <div class="custom-review mb-50">
+                                    <div class="flex card-list">
+                                        <div class="card-review">
+                                            <div class="percent">
+                                                <svg>
+                                                    <circle cx="105" cy="105" r="100"></circle>
+                                                    <circle cx="105" cy="105" r="100"
+                                                            style="--percent:@(avgScore * 20)"></circle>
+                                                </svg>
+                                                <div class="number center">
+                                                    <span>@Localizer["OverallAverage"]</span>
+                                                    <h5 class="number-reating">@avgScore.ToString("0.0")</h5>
+                                                    <span>@Localizer["OutOf5"]</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="review-list">
+                                            <div class="review-list-item mb-40">
+                                                <span class="comfort">@Localizer["OverallScore"]</span>
+                                                <div class="flex-two">
+                                                    <span class="reating">@Localizer["Score"] @avgScore.ToString("0.0")</span>
+                                                    <div class="start">
+                                                        @for (int i = 0; i < 5; i++)
+                                                        {
+                                                            if (i < roundedAvgScore)
+                                                            {
+                                                                <i class="icon-Star"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="icon-Star" style="opacity:.3"></i>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width:@(avgScore * 20)%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="client-review mb-30">
+                                    <div class="flex-two mb-50 inner-header">
+                                        <h4 class="title-review">@Localizer["GuestReviews"]</h4>
+
+                                        <div class="client-review flex">
+                                            <span>@totalReview @Localizer["Review"]</span>
+                                            <div class="start">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < roundedAvgScore)
+                                                    {
+                                                        <i class="icon-Star"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="icon-Star" style="opacity:.3"></i>
+                                                    }
+                                                }
+                                            </div>
+                                            <span>(@avgScore.ToString("0.0") / 5)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="client-review-list">
+                                        @if (activeReviews.Any())
+                                        {
+                                            @foreach (var item in activeReviews)
+                                            {
+                                                <div class="client-review-item flex">
+                                                    <div class="avata">
+                                                        <img src="/assets/images/avata/avt-review.jpg" alt="@Localizer["ReviewerAvatar"]">
+                                                    </div>
+
+                                                    <div class="content">
+                                                        <span class="name">@item.NameSurname</span>
+                                                        <p class="des">@item.Detail</p>
+
+                                                        <div class="start">
+                                                            @for (int i = 0; i < 5; i++)
+                                                            {
+                                                                if (i < item.Score)
+                                                                {
+                                                                    <i class="icon-Star"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="icon-Star" style="opacity:.3"></i>
+                                                                }
+                                                            }
+                                                            <span>@item.Score</span>
+                                                        </div>
+
+                                                        <span class="date">@item.ReviewDate.ToString("dd MMM yyyy")</span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="des">@Localizer["NoReviewsForThisTourYet"]</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="side-bar-right sticky-sidebar">
+                        <div class="sidebar-widget modern-book-widget">
+                            <h6 class="block-heading">@Localizer["BookThisTour"]</h6>
+
+                            <div class="tour-book-summary">
+                                <div class="summary-price">
+                                    <span class="label">@Localizer["StartingPrice"]</span>
+                                    <h3>$@Model.Price</h3>
+                                </div>
+
+                                <ul class="summary-list">
+                                    <li>
+                                        <span>@Localizer["Duration"]</span>
+                                        <strong>@Model.DayCount @Localizer["Day"]</strong>
+                                    </li>
+                                    <li>
+                                        <span>@Localizer["Capacity"]</span>
+                                        <strong>@Model.Capacity @Localizer["Person"]</strong>
+                                    </li>
+                                    <li>
+                                        <span>@Localizer["Location"]</span>
+                                        <strong>@Model.Location</strong>
+                                    </li>
+                                </ul>
+
+                                <a href="#" class="booking-btn">@Localizer["MakeReservation"]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+}
+
+<style>
+    .style-modern {
+        padding: 30px 0 80px;
+    }
+
+    .map-card-modern {
+        padding: 28px;
+    }
+
+    .map-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 20px;
+    }
+
+    .map-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(20, 184, 166, 0.12);
+        color: #0f766e;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    .mb-8 {
+        margin-bottom: 8px;
+    }
+
+    .map-subtitle {
+        color: #6b7280;
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .tour-map-image-wrapper {
+        width: 100%;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        margin-bottom: 22px;
+    }
+
+    .tour-map-image {
+        width: 100%;
+        height: 460px;
+        object-fit: cover;
+        display: block;
+        transition: transform .35s ease;
+    }
+
+        .tour-map-image:hover {
+            transform: scale(1.015);
+        }
+
+    .map-info-box {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .map-info-item {
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 18px;
+        padding: 18px;
+    }
+
+    .map-info-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin-bottom: 8px;
+    }
+
+    .map-info-item strong {
+        color: #111827;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+   @@media (max-width: 991px) {
+        .tour-map-image
+
+    {
+        height: 360px;
+    }
+
+    .map-info-box {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    @@media (max-width: 767px) {
+        .tour-map-image
+
+    {
+        height: 260px;
+    }
+
+    .map-card-modern {
+        padding: 22px;
+    }
+
+    }
+
+    .tour-hero-banner {
+        position: relative;
+        min-height: 520px;
+        border-radius: 28px;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: end;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+    }
+
+    .tour-hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%);
+    }
+
+    .tour-hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding: 42px;
+    }
+
+    .hero-text .title {
+        color: #fff;
+        font-size: 52px;
+        line-height: 1.1;
+        margin: 14px 0 18px;
+        font-weight: 800;
+    }
+
+    .hero-text .list-wrap-heading li,
+    .hero-text .list-wrap-heading span,
+    .hero-text .list-wrap-heading i {
+        color: #fff !important;
+    }
+
+    .hero-text .feature {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #14b8a6;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .hero-price-box {
+        background: rgba(255,255,255,0.14);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.18);
+        padding: 24px;
+        border-radius: 20px;
+        text-align: right;
+    }
+
+        .hero-price-box .start i,
+        .hero-price-box .review {
+            color: #fff !important;
+        }
+
+        .hero-price-box .price-sale {
+            color: #22c55e !important;
+            font-size: 42px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .hero-price-box .price {
+            color: rgba(255,255,255,0.75) !important;
+            font-size: 22px;
+            margin-left: 8px;
+            text-decoration: line-through;
+        }
+
+    .modern-tabs {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 18px;
+        margin-bottom: 28px;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+    }
+
+        .modern-tabs .nav-link {
+            border: none;
+            border-radius: 14px;
+            padding: 14px 22px;
+            background: #f8fafc;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+            .modern-tabs .nav-link.active {
+                background: #14b8a6;
+                color: #fff;
+            }
+
+    .content-card {
+        background: #fff;
+        border-radius: 22px;
+        padding: 28px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 22px;
+    }
+
+    .sticky-sidebar {
+        position: sticky;
+        top: 120px;
+    }
+
+    .modern-book-widget {
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .tour-book-summary .summary-price {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+        .tour-book-summary .summary-price .label {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .tour-book-summary .summary-price h3 {
+            font-size: 38px;
+            margin: 0;
+            color: #10b981;
+            font-weight: 800;
+        }
+
+    .tour-book-summary .summary-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px;
+    }
+
+        .tour-book-summary .summary-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+    .booking-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 18px;
+        border-radius: 14px;
+        background: #10b981;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .custom-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .gallery-item-img {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 16px;
+        transition: .3s ease;
+    }
+
+        .gallery-item-img:hover {
+            transform: scale(1.02);
+        }
+
+    .custom-tour-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .tour-accordion-item {
+        border: 1px solid #eef2f7;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        transition: all .25s ease;
+    }
+
+    .tour-accordion-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 20px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #1f2937;
+        transition: all .25s ease;
+    }
+
+        .tour-accordion-header.active,
+        .tour-accordion-header:hover {
+            background: #f8fafc;
+        }
+
+    .tour-day-badge {
+        min-width: 72px;
+        text-align: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #2563eb;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .tour-day-title {
+        flex: 1;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .tour-day-icon {
+        color: #6b7280;
+        font-size: 16px;
+    }
+
+    .tour-accordion-body {
+        padding: 0 20px 20px 106px;
+        color: #6b7280;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    @@media (max-width: 991px) {
+        .tour-hero-banner {
+            min-height: 420px;
+        }
+
+        .tour-hero-content {
+            padding: 26px;
+        }
+
+        .hero-text .title {
+            font-size: 36px;
+        }
+
+        .hero-price-box {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .sticky-sidebar {
+            position: static;
+        }
+
+        .tour-accordion-body {
+            padding: 0 18px 18px 18px;
+        }
+
+        .tour-accordion-header {
+            flex-wrap: wrap;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .hero-text .title {
+            font-size: 28px;
+        }
+
+        .custom-gallery-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .content-card {
+            padding: 22px;
+        }
+
+        .tour-hero-banner {
+            min-height: 340px;
+        }
+
+        .tour-hero-content {
+            padding: 20px;
+        }
+    }
+</style>

@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+	<data name="TourDetails" xml:space="preserve">
+  <value>Tour Details</value>
+</data>
+	<data name="LocationPlaceholder" xml:space="preserve">
+  <value>e.g., Cappadocia / Nevşehir</value>
+</data>
+	<data name="DurationInDaysHint" xml:space="preserve">
+  <value>Duration in days (1–365)</value>
+</data>
+	<data name="CapacityHint" xml:space="preserve">
+  <value>Maximum number of participants</value>
+</data>
+	<data name="PriceUsd" xml:space="preserve">
+  <value>Price (USD)</value>
+</data>
+	<data name="PricePerPersonHint" xml:space="preserve">
+  <value>Tour fee per person</value>
+</data>
+	<data name="AsiaTours" xml:space="preserve">
+    <value>Asia Tours</value>
+  </data>
+	<data name="EuropeTours" xml:space="preserve">
+    <value>Europe Tours</value>
+  </data>
+	<data name="AmericaTours" xml:space="preserve">
+    <value>America Tours</value>
+  </data>
+	<data name="AfricaTours" xml:space="preserve">
+    <value>Africa Tours</value>
+  </data>
+	<data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+	<data name="BookingNow" xml:space="preserve">
+  <value>Booking Now</value>
+</data>
+
+	<data name="FollowUs" xml:space="preserve">
+  <value>Follow Us :</value>
+</data>
+	<data name="TourNotFound" xml:space="preserve">
+  <value>Tour not found.</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Featured</value>
+</data>
+	<data name="Day" xml:space="preserve">
+  <value>Day</value>
+</data>
+	<data name="Maximum" xml:space="preserve">
+  <value>Maximum</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>Person</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>Review</value>
+</data>
+	<data name="Overview" xml:space="preserve">
+  <value>Overview</value>
+</data>
+	<data name="Program" xml:space="preserve">
+  <value>Program</value>
+</data>
+	<data name="Gallery" xml:space="preserve">
+  <value>Gallery</value>
+</data>
+	<data name="Map" xml:space="preserve">
+  <value>Map</value>
+</data>
+	<data name="Reviews" xml:space="preserve">
+  <value>Reviews</value>
+</data>
+	<data name="Description" xml:space="preserve">
+  <value>Description</value>
+</data>
+	<data name="TourInformation" xml:space="preserve">
+  <value>Tour Information</value>
+</data>
+	<data name="Location" xml:space="preserve">
+  <value>Location</value>
+</data>
+	<data name="TourDuration" xml:space="preserve">
+  <value>Tour Duration</value>
+</data>
+	<data name="MaximumCapacity" xml:space="preserve">
+  <value>Maximum Capacity</value>
+</data>
+	<data name="Price" xml:space="preserve">
+  <value>Price</value>
+</data>
+	<data name="DailyTourProgram" xml:space="preserve">
+  <value>Daily Tour Program</value>
+</data>
+	<data name="NoPlanAddedForThisTourYet" xml:space="preserve">
+  <value>No plan has been added for this tour yet.</value>
+</data>
+	<data name="NoGalleryImagesAddedForThisTourYet" xml:space="preserve">
+  <value>No gallery images have been added for this tour yet.</value>
+</data>
+	<data name="MapLocation" xml:space="preserve">
+  <value>Map / Location</value>
+</data>
+	<data name="OverallAverage" xml:space="preserve">
+  <value>Overall Average</value>
+</data>
+	<data name="OutOf5" xml:space="preserve">
+  <value>Out of 5</value>
+</data>
+	<data name="OverallScore" xml:space="preserve">
+  <value>Overall Score</value>
+</data>
+	<data name="Score" xml:space="preserve">
+  <value>Score</value>
+</data>
+	<data name="GuestReviews" xml:space="preserve">
+  <value>Guest Reviews</value>
+</data>
+	<data name="NoReviewsForThisTourYet" xml:space="preserve">
+  <value>No reviews have been made for this tour yet.</value>
+</data>
+	<data name="BookThisTour" xml:space="preserve">
+  <value>Book This Tour</value>
+</data>
+	<data name="StartingPrice" xml:space="preserve">
+  <value>Starting Price</value>
+</data>
+	<data name="Duration" xml:space="preserve">
+  <value>Duration</value>
+</data>
+	<data name="Capacity" xml:space="preserve">
+  <value>Capacity</value>
+</data>
+	<data name="SearchHere" xml:space="preserve">
+  <value>Search here...</value>
+</data>
+
+	<data name="SignIn" xml:space="preserve">
+  <value>Sign in</value>
+</data>
+
+	<data name="English" xml:space="preserve">
+  <value>English</value>
+</data>
+
+	<data name="Turkish" xml:space="preserve">
+  <value>Turkish</value>
+</data>
+
+	<data name="Russian" xml:space="preserve">
+  <value>Russian</value>
+</data>
+
+	<data name="ArchiveTour" xml:space="preserve">
+  <value>Archive Tour</value>
+</data>
+
+	<data name="TourPackage" xml:space="preserve">
+  <value>Tour Package</value>
+</data>
+
+	<data name="Destination" xml:space="preserve">
+  <value>Destination</value>
+</data>
+
+	<data name="Type" xml:space="preserve">
+  <value>Type</value>
+</data>
+
+	<data name="Duration" xml:space="preserve">
+  <value>Duration</value>
+</data>
+
+	<data name="Guests" xml:space="preserve">
+  <value>Guests</value>
+</data>
+
+	<data name="Search" xml:space="preserve">
+  <value>Search</value>
+</data>
+
+	<data name="BookingType" xml:space="preserve">
+  <value>Booking Type</value>
+</data>
+
+	<data name="DaysTour" xml:space="preserve">
+  <value>2-4 days tour</value>
+</data>
+
+	<data name="Showing" xml:space="preserve">
+  <value>Showing</value>
+</data>
+
+	<data name="Of" xml:space="preserve">
+  <value>of</value>
+</data>
+
+	<data name="Results" xml:space="preserve">
+  <value>Results</value>
+</data>
+
+	<data name="Price" xml:space="preserve">
+  <value>Price</value>
+</data>
+	<data name="New" xml:space="preserve">
+  <value>New</value>
+</data>
+	<data name="RecentlyAdded" xml:space="preserve">
+  <value>Recently Added</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Featured</value>
+</data>
+	<data name="UnitedStatesUSA" xml:space="preserve">
+  <value>United States USA</value>
+</data>
+	<data name="DaysAnd6Nights" xml:space="preserve">
+  <value>Days and 6 nights</value>
+</data>
+	<data name="FromMoscow" xml:space="preserve">
+  <value>From Moscow</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>Review</value>
+</data>
+	<data name="Days" xml:space="preserve">
+  <value>days</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>Person</value>
+</data>
+	<data name="From" xml:space="preserve">
+  <value>From</value>
+</data>
+	<data name="AllDestinations" xml:space="preserve"><value>All Destinations</value></data>
+	<data name="IstanbulTurkey" xml:space="preserve"><value>Istanbul, Turkey</value></data>
+	<data name="ParisFrance" xml:space="preserve"><value>Paris, France</value></data>
+	<data name="RomeItaly" xml:space="preserve"><value>Rome, Italy</value></data>
+	<data name="BangkokThailand" xml:space="preserve"><value>Bangkok, Thailand</value></data>
+
+	<data name="AllTourTypes" xml:space="preserve"><value>All Tour Types</value></data>
+	<data name="AnyDuration" xml:space="preserve"><value>Any Duration</value></data>
+	<data name="OneToThreeDays" xml:space="preserve"><value>1-3 Days</value></data>
+	<data name="FourToSevenDays" xml:space="preserve"><value>4-7 Days</value></data>
+	<data name="EightToTwelveDays" xml:space="preserve"><value>8-12 Days</value></data>
+	<data name="MoreThanTwelveDays" xml:space="preserve"><value>12+ Days</value></data>
+	<data name="SearchTour" xml:space="preserve"><value>Search Tour</value></data>
+	<data name="SearchTourPlaceholder" xml:space="preserve"><value>Enter tour name...</value></data>
+</root>

@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Views/Shared/_TourLayout.cshtml";
+
+    int page = int.TryParse(Context.Request.Query["page"], out int p) ? p : 1;
+    if (page < 1)
+    {
+        page = 1;
+    }
+
+    string searchTerm = Context.Request.Query["searchTerm"];
+    string categoryId = Context.Request.Query["categoryId"];
+    string duration = Context.Request.Query["duration"];
+    int? guestCount = int.TryParse(Context.Request.Query["guestCount"], out int g) ? g : null;
+}
+
+@await Component.InvokeAsync("_TourBrandComponentPartial")
+
+@await Component.InvokeAsync("_TourWidgetSelectComponentPartial", new
+{
+    searchTerm = searchTerm,
+    categoryId = categoryId,
+    duration = duration,
+    guestCount = guestCount
+})
+
+@await Component.InvokeAsync("_TourListByCategoryComponentPartial", new
+{
+    categoryId = categoryId,
+    page = page
+})

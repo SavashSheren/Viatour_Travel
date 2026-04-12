@@ -1,0 +1,188 @@
+﻿@model List<Viatour_Travel.Dtos.TourDtos.ResultTourDto>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Viatour_Travel.SharedResource> Localizer
+@using System.Linq;
+
+@{
+    int currentPage = ViewBag.CurrentPage != null ? (int)ViewBag.CurrentPage : 1;
+    int totalPages = ViewBag.TotalPages != null ? (int)ViewBag.TotalPages : 1;
+    string currentSearchTerm = ViewBag.SearchTerm?.ToString();
+    string currentCategoryId = ViewBag.CategoryId?.ToString();
+    string currentDuration = ViewBag.Duration?.ToString();
+    string currentGuestCount = ViewBag.GuestCount?.ToString();
+    var tours = Model ?? new List<Viatour_Travel.Dtos.TourDtos.ResultTourDto>();
+}
+   
+   
+
+<section class="archieve-tour">
+    <div class="tf-container">
+        <div class="listing-list-car-wrap listing-list-car-wrap-grid3">
+            <form action="/" class="tf-my-listing mb-37">
+                <div class="row align-center">
+                    <div class="col-sm-5">
+                        <p class="showing">
+                            @Localizer["Showing"] <span class="text-main">@tours.Count</span> @Localizer["Results"]
+                        </p>
+                    </div>
+                    <div class="col-sm-7 flex-six group-bar-wrap">
+                        <div class="listing-all-wrap">
+                            <div class="flex-three">
+                                <div class="group-select-recently">
+                                    <div class="nice-select" tabindex="0">
+                                        <i class="icon-Vector6"></i>
+                                        <span class="current">@Localizer["Price"]</span>
+                                        <ul class="list">
+                                            <li data-value="" class="option selected focus">@Localizer["Price"]</li>
+                                            <li data-value="new" class="option">@Localizer["New"]</li>
+                                            <li data-value="Recently Added" class="option">
+                                                @Localizer["RecentlyAdded"]
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="toolbar-list">
+                                    <div class="form-group">
+                                        <a class="btn-display-listing-grid">
+                                            <i class="icon-list"></i>
+                                        </a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a class="btn-display-listing-list active">
+                                            <i class="icon-Group-1000001297"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row mb-60">
+                @foreach (var item in tours)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="tour-listing box-sd h-100">
+                            <a href="tour-single.html" class="tour-listing-image">
+                                <div class="badge-top flex-two">
+                                    <span class="feature">
+                                        @(string.IsNullOrEmpty(item.Badge) ? Localizer["Featured"] : item.Badge)
+                                    </span>
+                                    <div class="badge-media flex-five">
+                                        <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                        <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                    </div>
+                                </div>
+
+                                <img src="@(string.IsNullOrEmpty(item.CoverImageUrl) ? "/vitour/assets/images/travel-list/2.jpg" : item.CoverImageUrl)"
+                                     alt="Image Listing"
+                                     style="width:100%; height:250px; object-fit:cover; display:block;">
+                            </a>
+
+                            <div class="tour-listing-content">
+                                <span class="map"><i class="icon-Vector4"></i>@Localizer["TourPackage"]</span>
+
+                                <h3 class="title-tour-list">
+                                    <a asp-controller="Tour" asp-action="TourDetail" asp-route-id="@item.TourId">
+                                        @item.TourTitle
+                                    </a>
+                                </h3>
+
+                                <div class="review">
+                                    <i class="icon-Star"></i>
+                                    <i class="icon-Star"></i>
+                                    <i class="icon-Star"></i>
+                                    <i class="icon-Star"></i>
+                                    <i class="icon-Star"></i>
+                                    <span>(1 @Localizer["Review"])</span>
+                                </div>
+
+                                <div class="icon-box flex-three">
+                                    <div class="icons flex-three">
+                                        <i class="icon-time-left"></i>
+                                        <span>@item.DayCount @Localizer["Days"]</span>
+                                    </div>
+
+                                    <div class="icons flex-three">
+                                        <svg width="21" height="16" viewBox="0 0 21 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                  stroke="currentColor" stroke-width="1.7"
+                                                  stroke-miterlimit="10" stroke-linecap="round"
+                                                  stroke-linejoin="round" />
+                                            <path d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                  stroke="currentColor" stroke-width="1.7"
+                                                  stroke-miterlimit="10" stroke-linecap="round"
+                                                  stroke-linejoin="round" />
+                                            <path d="M17.1035 15.1797V9.02734" stroke="currentColor"
+                                                  stroke-width="1.7" stroke-miterlimit="10"
+                                                  stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M20.1797 12.1035H14.0273" stroke="currentColor"
+                                                  stroke-width="1.7" stroke-miterlimit="10"
+                                                  stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <span>@item.Capacity @Localizer["Person"]</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex-two">
+                                    <div class="price-box flex-three">
+                                        <p>@Localizer["From"] <span class="price-sale">$@item.Price</span></p>
+                                        <span class="price">$@item.Price</span>
+                                    </div>
+                                    <div class="icon-bookmark">
+                                        <i class="icon-Vector-151"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+
+ 
+
+            @if (totalPages > 1)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="tf-pagination flex-five mt-20">
+
+                            @if (currentPage > 1)
+                            {
+                                <li>
+                                    <a class="pages-link"
+                                       href="?page=@(currentPage - 1)&searchTerm=@currentSearchTerm&categoryId=@currentCategoryId&duration=@currentDuration&guestCount=@currentGuestCount">
+                                        <i class="icon-29"></i>
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="@(i == currentPage ? "pages-item active" : "")">
+                                    <a class="pages-link"
+                                       href="?page=@i&searchTerm=@currentSearchTerm&categoryId=@currentCategoryId&duration=@currentDuration&guestCount=@currentGuestCount">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            @if (currentPage < totalPages)
+                            {
+                                <li>
+                                    <a class="pages-link"
+                                       href="?page=@(currentPage + 1)&searchTerm=@currentSearchTerm&categoryId=@currentCategoryId&duration=@currentDuration&guestCount=@currentGuestCount">
+                                        <i class="icon--1"></i>
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            }
+</section>

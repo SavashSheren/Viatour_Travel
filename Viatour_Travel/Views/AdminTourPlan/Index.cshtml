@@ -1,0 +1,381 @@
+﻿@model List<Viatour_Travel.Dtos.TourDtos.TourPlanDto>
+
+@{
+    ViewData["Title"] = "Manage Tour Plans";
+    Layout = "~/Views/Shared/_AdminTourLayout.cshtml";
+
+    var tourId = ViewBag.TourId?.ToString() ?? "";
+    var tourTitle = ViewBag.TourTitle?.ToString() ?? "Tour";
+    var dayCount = ViewBag.DayCount != null ? Convert.ToInt32(ViewBag.DayCount) : 0;
+}
+
+@section Styles {
+    <style>
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .page-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .page-title {
+            margin: 0;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-soft,
+        .btn-primary-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .btn-soft {
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+            .btn-soft:hover {
+                background: var(--surface);
+                color: var(--navy);
+            }
+
+        .btn-primary-custom {
+            background: var(--accent);
+            color: #fff;
+            border: 1px solid var(--accent);
+            box-shadow: 0 6px 18px rgba(45,156,219,.18);
+        }
+
+            .btn-primary-custom:hover {
+                background: var(--accent-dk);
+                color: #fff;
+            }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        @@media (max-width: 900px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .summary-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--navy);
+            margin: 0;
+        }
+
+        .list-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .list-card-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .list-card-title {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .plan-table-wrap {
+            overflow-x: auto;
+        }
+
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .plan-table th,
+            .plan-table td {
+                padding: 16px 18px;
+                border-bottom: 1px solid #edf2f7;
+                text-align: left;
+                vertical-align: top;
+            }
+
+            .plan-table th {
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                color: var(--text-muted);
+                background: #fcfdff;
+            }
+
+        .plan-day-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #2563eb;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .plan-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .plan-description {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.65;
+            max-width: 720px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 9px;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .btn-edit {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+            .btn-edit:hover {
+                background: #dbeafe;
+                color: #1e40af;
+            }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+            .btn-delete:hover {
+                background: #fee2e2;
+                color: #b91c1c;
+            }
+
+        .empty-state {
+            padding: 42px 22px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 18px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+    </style>
+}
+
+<div class="section-header">
+    <div>
+        <p class="page-eyebrow">Tour Plan Management</p>
+        <h1 class="page-title">Manage Tour Plans</h1>
+        <p class="page-subtitle">
+            Add, edit and organize daily tour plans for <strong>@tourTitle</strong>.
+        </p>
+    </div>
+
+    <div class="header-actions">
+        <a href="/AdminTour/TourList" class="btn-soft">
+            <i class="bi bi-arrow-left"></i>
+            Back to Tours
+        </a>
+
+        <a href="/AdminTourPlan/CreateTourPlan?tourId=@tourId" class="btn-primary-custom">
+            <i class="bi bi-plus-circle"></i>
+            Add New Plan
+        </a>
+    </div>
+</div>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <div class="summary-label">Tour</div>
+        <p class="summary-value">@tourTitle</p>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-label">Tour Duration</div>
+        <p class="summary-value">@dayCount Day(s)</p>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-label">Existing Plans</div>
+        <p class="summary-value">@Model.Count</p>
+    </div>
+</div>
+
+<div class="list-card">
+    <div class="list-card-header">
+        <h3 class="list-card-title">Daily Plan List</h3>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="plan-table-wrap">
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Plan Title</th>
+                        <th>Description</th>
+                        <th style="width: 180px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderBy(x => x.DayNumber))
+                    {
+                        <tr>
+                            <td>
+                                <span class="plan-day-badge">Day @item.DayNumber</span>
+                            </td>
+                            <td>
+                                <div class="plan-title">
+                                    @(string.IsNullOrWhiteSpace(item.Title) ? $"Day {item.DayNumber}" : item.Title)
+                                </div>
+                            </td>
+                            <td>
+                                <div class="plan-description">
+                                    @item.Description
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-group">
+                                    <a href="/AdminTourPlan/UpdateTourPlan/@item.TourPlanId" class="btn-action btn-edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
+                                    </a>
+
+                                    <a href="/AdminTourPlan/DeleteTourPlan?id=@item.TourPlanId&tourId=@tourId"
+                                       class="btn-action btn-delete"
+                                       onclick="return confirm('Are you sure you want to delete this plan?');">
+                                        <i class="bi bi-trash"></i>
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="bi bi-calendar2-plus"></i>
+            </div>
+            <div class="empty-title">No plans added yet</div>
+            <div class="empty-text">
+                This tour does not have any daily plan records yet. Start by adding the first day.
+            </div>
+            <a href="/AdminTourPlan/CreateTourPlan?tourId=@tourId" class="btn-primary-custom">
+                <i class="bi bi-plus-circle"></i>
+                Add First Plan
+            </a>
+        </div>
+    }
+</div>

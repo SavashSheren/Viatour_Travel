@@ -1,0 +1,103 @@
+﻿
+@{
+    Layout = null;
+}
+@{
+    int page = int.TryParse(Context.Request.Query["page"], out int p) ? p : 1;
+    if (page < 1)
+    {
+        page = 1;
+    }
+
+    string searchTerm = Context.Request.Query["searchTerm"];
+    string categoryId = Context.Request.Query["categoryId"];
+    string duration = Context.Request.Query["duration"];
+    int? guestCount = int.TryParse(Context.Request.Query["guestCount"], out int g) ? g : null;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+@await Component.InvokeAsync("_TourHeadComponentPartial")
+
+
+<body class="body header-fixed ">
+    W
+    <div class="preload preload-container">
+        <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+            <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20"
+                    stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+            <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20"
+                    stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+            <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20"
+                    stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20"
+                    stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        </svg>
+    </div>
+
+    <!-- /preload --> 
+
+    <div id="wrapper">
+        <div id="pagee" class="clearfix">
+
+            <!-- Main Header -->
+            @await Component.InvokeAsync("_TourHeaderComponentPartial")
+          
+            <!-- End Main Header -->
+            <main id="main">
+                @await Component.InvokeAsync("_TourBrandComponentPartial")
+               
+
+                <!-- Widget Select Form -->
+                @await Component.InvokeAsync("_TourWidgetSelectComponentPartial", new
+                               {
+                                searchTerm = searchTerm,
+                                CategoryId = categoryId,
+                                duration = duration,
+                                guestCount = guestCount
+                                })
+               
+                <!-- Widget Select Form -->
+                <!-- Widget archieve tour -->
+                @await Component.InvokeAsync("_AllTourListComponentPartial", new
+                                {
+                                 page = page,
+                                searchTerm = searchTerm,
+                                CategoryId = categoryId,
+                                duration = duration,
+                                guestCount = guestCount
+                                })
+              
+                <!-- Widget archieve tour -->
+                <!-- Widget About Us -->
+              
+                <!-- Widget About Us -->
+
+            </main>
+            @await Component.InvokeAsync("_TourFooterCompanentPartial")
+            
+
+            <!-- Bottom -->
+        </div>
+        <!-- /#page -->
+    </div>
+
+    <!-- Modal Popup Bid -->
+
+    <a id="scroll-top" class="button-go"></a>
+
+    <!-- Javascript -->
+    <script src="/vitour/app/js/jquery.min.js"></script>
+    <script src="/vitour/app/js/jquery.nice-select.min.js"></script>
+    <script src="/vitour/app/js/bootstrap.min.js"></script>
+    <script src="/vitour/app/js/swiper-bundle.min.js"></script>
+    <script src="/vitour/app/js/swiper.js"></script>
+    <script src="/vitour/app/js/plugin.js"></script>
+    <script src="/vitour/app/js/jquery.fancybox.js"></script>
+    <script src="/vitour/app/js/price-ranger.js"></script>
+    <script src="/vitour/app/js/shortcodes.js"></script>
+    <script src="/vitour/app/js/main.js"></script>
+
+</body>
+
+</html>

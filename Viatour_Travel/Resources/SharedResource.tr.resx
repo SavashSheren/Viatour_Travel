@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<data name="Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+	<data name="SearchTour" xml:space="preserve"><value>Tur Ara</value></data>
+	<data name="SearchTourPlaceholder" xml:space="preserve"><value>Tur adını girin...</value></data>
+	<data name="AsiaTours" xml:space="preserve">
+    <value>Asya Turları</value>
+  </data>
+	<data name="EuropeTours" xml:space="preserve">
+    <value>Avrupa Turları</value>
+  </data>
+	<data name="AmericaTours" xml:space="preserve">
+    <value>Amerika Turları</value>
+  </data>
+	<data name="AfricaTours" xml:space="preserve">
+    <value>Afrika Turları</value>
+  </data>
+	<data name="Contact" xml:space="preserve">
+    <value>İletişim</value>
+  </data>
+	<data name="BookingNow" xml:space="preserve">
+  <value>Şimdi Rezervasyon Yap</value>
+</data>
+
+	<data name="FollowUs" xml:space="preserve">
+  <value>Bizi Takip Edin :</value>
+</data>
+
+	<data name="SearchHere" xml:space="preserve">
+  <value>Burada ara...</value>
+</data>
+
+	<data name="SignIn" xml:space="preserve">
+  <value>Giriş Yap</value>
+</data>
+
+	<data name="English" xml:space="preserve">
+  <value>İngilizce</value>
+</data>
+	<data name="TourNotFound" xml:space="preserve">
+  <value>Tur bulunamadı.</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Öne Çıkan</value>
+</data>
+	<data name="Day" xml:space="preserve">
+  <value>Gün</value>
+</data>
+	<data name="Maximum" xml:space="preserve">
+  <value>Maksimum</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>Kişi</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>Yorum</value>
+</data>
+	<data name="Overview" xml:space="preserve">
+  <value>Genel Bakış</value>
+</data>
+	<data name="Program" xml:space="preserve">
+  <value>Program</value>
+</data>
+	<data name="Gallery" xml:space="preserve">
+  <value>Galeri</value>
+</data>
+	<data name="Map" xml:space="preserve">
+  <value>Harita</value>
+</data>
+	<data name="Reviews" xml:space="preserve">
+  <value>Yorumlar</value>
+</data>
+	<data name="Description" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+	<data name="TourInformation" xml:space="preserve">
+  <value>Tur Bilgileri</value>
+</data>
+	<data name="Location" xml:space="preserve">
+  <value>Lokasyon</value>
+</data>
+	<data name="TourDuration" xml:space="preserve">
+  <value>Tur Süresi</value>
+</data>
+	<data name="MaximumCapacity" xml:space="preserve">
+  <value>Maksimum Kapasite</value>
+</data>
+	<data name="Price" xml:space="preserve">
+  <value>Fiyat</value>
+</data>
+	<data name="DailyTourProgram" xml:space="preserve">
+  <value>Günlük Tur Programı</value>
+</data>
+	<data name="NoPlanAddedForThisTourYet" xml:space="preserve">
+  <value>Bu tur için henüz plan eklenmemiş.</value>
+</data>
+	<data name="NoGalleryImagesAddedForThisTourYet" xml:space="preserve">
+  <value>Bu tur için henüz galeri görseli eklenmemiş.</value>
+</data>
+	<data name="MapLocation" xml:space="preserve">
+  <value>Harita / Lokasyon</value>
+</data>
+	<data name="OverallAverage" xml:space="preserve">
+  <value>Genel Ortalama</value>
+</data>
+	<data name="OutOf5" xml:space="preserve">
+  <value>5 Üzerinden</value>
+</data>
+	<data name="OverallScore" xml:space="preserve">
+  <value>Genel Puan</value>
+</data>
+	<data name="Score" xml:space="preserve">
+  <value>Puan</value>
+</data>
+	<data name="GuestReviews" xml:space="preserve">
+  <value>Misafir Yorumları</value>
+</data>
+	<data name="NoReviewsForThisTourYet" xml:space="preserve">
+  <value>Bu tur için henüz yorum yapılmamış.</value>
+</data>
+	<data name="BookThisTour" xml:space="preserve">
+  <value>Bu Turu Rezerve Et</value>
+</data>
+	<data name="StartingPrice" xml:space="preserve">
+  <value>Başlangıç Fiyatı</value>
+</data>
+	<data name="Duration" xml:space="preserve">
+  <value>Süre</value>
+</data>
+	<data name="Capacity" xml:space="preserve">
+  <value>Kapasite</value>
+</data>
+
+	<data name="Turkish" xml:space="preserve">
+  <value>Türkçe</value>
+</data>
+
+	<data name="Russian" xml:space="preserve">
+  <value>Rusça</value>
+</data>
+
+	<data name="ArchiveTour" xml:space="preserve">
+  <value>Tur Arşivi</value>
+</data>
+
+	<data name="TourPackage" xml:space="preserve">
+  <value>Tur Paketi</value>
+</data>
+
+	<data name="Destination" xml:space="preserve">
+  <value>Destinasyon</value>
+</data>
+
+	<data name="Type" xml:space="preserve">
+  <value>Tür</value>
+</data>
+
+	<data name="Duration" xml:space="preserve">
+  <value>Süre</value>
+</data>
+
+	<data name="Guests" xml:space="preserve">
+  <value>Misafir</value>
+</data>
+
+	<data name="Search" xml:space="preserve">
+  <value>Ara</value>
+</data>
+
+	<data name="BookingType" xml:space="preserve">
+  <value>Rezervasyon Türü</value>
+</data>
+
+	<data name="DaysTour" xml:space="preserve">
+  <value>2-4 günlük tur</value>
+</data>
+
+	<data name="Showing" xml:space="preserve">
+  <value>Gösterilen</value>
+</data>
+
+	<data name="Of" xml:space="preserve">
+  <value>/</value>
+</data>
+
+	<data name="Results" xml:space="preserve">
+  <value>Sonuç</value>
+</data>
+
+	<data name="Price" xml:space="preserve">
+  <value>Fiyat</value>
+</data>
+	<data name="New" xml:space="preserve">
+  <value>Yeni</value>
+</data>
+	<data name="RecentlyAdded" xml:space="preserve">
+  <value>Son Eklenenler</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Öne Çıkan</value>
+</data>
+	<data name="UnitedStatesUSA" xml:space="preserve">
+  <value>Amerika Birleşik Devletleri</value>
+</data>
+	<data name="DaysAnd6Nights" xml:space="preserve">
+  <value>6 gece ve gündüz</value>
+</data>
+	<data name="FromMoscow" xml:space="preserve">
+  <value>Moskova'dan</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>Yorum</value>
+</data>
+	<data name="Days" xml:space="preserve">
+  <value>gün</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>Kişi</value>
+</data>
+	<data name="From" xml:space="preserve">
+  <value>Başlangıç</value>
+</data>
+	<data name="AllDestinations" xml:space="preserve"><value>Tüm Destinasyonlar</value></data>
+	<data name="IstanbulTurkey" xml:space="preserve"><value>İstanbul, Türkiye</value></data>
+	<data name="ParisFrance" xml:space="preserve"><value>Paris, Fransa</value></data>
+	<data name="RomeItaly" xml:space="preserve"><value>Roma, İtalya</value></data>
+	<data name="BangkokThailand" xml:space="preserve"><value>Bangkok, Tayland</value></data>
+
+	<data name="AllTourTypes" xml:space="preserve"><value>Tüm Tur Türleri</value></data>
+	<data name="AnyDuration" xml:space="preserve"><value>Herhangi Bir Süre</value></data>
+	<data name="OneToThreeDays" xml:space="preserve"><value>1-3 Gün</value></data>
+	<data name="FourToSevenDays" xml:space="preserve"><value>4-7 Gün</value></data>
+	<data name="EightToTwelveDays" xml:space="preserve"><value>8-12 Gün</value></data>
+	<data name="MoreThanTwelveDays" xml:space="preserve"><value>12+ Gün</value></data>
+</root>

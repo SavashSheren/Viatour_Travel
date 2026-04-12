@@ -1,0 +1,203 @@
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Viatour_Travel.SharedResource> Localizer
+
+<div class="mt--82 z-index3 relative">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="search-form-widget-slider relative">
+                    <form method="get" asp-controller="Tour" asp-action="TourList" id="search-form-slider">
+
+                        <input type="hidden" name="categoryId" id="selectedCategoryId" value="@ViewBag.CategoryId" />
+
+                        <div class="flex wd-search">
+
+                            <div class="form-group flex">
+                                <i class="icon-18"></i>
+                                <div class="search-bar-group">
+                                    <label>@Localizer["SearchTour"]</label>
+                                    <input type="text"
+                                           name="searchTerm"
+                                           value="@ViewBag.SearchTerm"
+                                           placeholder="@Localizer["SearchTourPlaceholder"]">
+                                </div>
+                            </div>
+
+                            <div class="form-group flex">
+                                <i class="icon-hiking-1-1"></i>
+                                <div class="search-bar-group">
+                                    <label>@Localizer["TourType"]</label>
+
+                                    @{
+                                        string currentCategoryName = Localizer["AllTourTypes"];
+
+                                        if (ViewBag.Categories != null && ViewBag.CategoryId != null)
+                                        {
+                                            foreach (var item in ViewBag.Categories)
+                                            {
+                                                if (item.CategoryId == ViewBag.CategoryId.ToString())
+                                                {
+                                                    currentCategoryName = item.CategoryName;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    <div class="nice-select" tabindex="0" id="tourTypeNiceSelect">
+                                        <span class="current">@currentCategoryName</span>
+                                        <ul class="list">
+                                            <li data-value="" class="option @(string.IsNullOrEmpty(ViewBag.CategoryId?.ToString()) ? "selected" : "")">
+                                                @Localizer["AllTourTypes"]
+                                            </li>
+
+                                            @if (ViewBag.Categories != null)
+                                            {
+                                                @foreach (var item in ViewBag.Categories)
+                                                {
+                                                    <li data-value="@item.CategoryId"
+                                                        class="option @(ViewBag.CategoryId != null && ViewBag.CategoryId.ToString() == item.CategoryId ? "selected" : "")">
+                                                        @item.CategoryName
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group flex">
+                                <i class="icon-time-left"></i>
+                                <div class="search-bar-group">
+                                    <label>@Localizer["Duration"]</label>
+
+                                    <input type="hidden" name="duration" id="selectedDuration" value="@ViewBag.Duration" />
+
+                                    @{
+                                        string currentDurationText = Localizer["AnyDuration"];
+
+                                        if (ViewBag.Duration != null)
+                                        {
+                                            switch (ViewBag.Duration.ToString())
+                                            {
+                                                case "1-3":
+                                                    currentDurationText = Localizer["OneToThreeDays"];
+                                                    break;
+                                                case "4-7":
+                                                    currentDurationText = Localizer["FourToSevenDays"];
+                                                    break;
+                                                case "8-12":
+                                                    currentDurationText = Localizer["EightToTwelveDays"];
+                                                    break;
+                                                case "12plus":
+                                                    currentDurationText = Localizer["MoreThanTwelveDays"];
+                                                    break;
+                                            }
+                                        }
+                                    }
+
+                                    <div class="nice-select" tabindex="0" id="durationNiceSelect">
+                                        <span class="current">@currentDurationText</span>
+                                        <ul class="list">
+                                            <li data-value="" class="option @(string.IsNullOrEmpty(ViewBag.Duration?.ToString()) ? "selected" : "")">
+                                                @Localizer["AnyDuration"]
+                                            </li>
+                                            <li data-value="1-3" class="option @(ViewBag.Duration?.ToString() == "1-3" ? "selected" : "")">
+                                                @Localizer["OneToThreeDays"]
+                                            </li>
+                                            <li data-value="4-7" class="option @(ViewBag.Duration?.ToString() == "4-7" ? "selected" : "")">
+                                                @Localizer["FourToSevenDays"]
+                                            </li>
+                                            <li data-value="8-12" class="option @(ViewBag.Duration?.ToString() == "8-12" ? "selected" : "")">
+                                                @Localizer["EightToTwelveDays"]
+                                            </li>
+                                            <li data-value="12plus" class="option @(ViewBag.Duration?.ToString() == "12plus" ? "selected" : "")">
+                                                @Localizer["MoreThanTwelveDays"]
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group flex">
+                                <i class="icon-user"></i>
+                                <div class="search-bar-group">
+                                    <label>@Localizer["Guests"]</label>
+                                    <input type="number" name="guestCount" min="1" value="@ViewBag.GuestCount" placeholder="@Localizer["Guests"]">
+                                </div>
+                            </div>
+
+                            <div class="form-group flex-two">
+                                <button type="submit" class="btn-search">
+                                    <i class="icon-Vector5"></i>@Localizer["Search"]
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="wd-search-form">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Category
+        const tourTypeSelect = document.querySelector("#tourTypeNiceSelect");
+        const hiddenCategoryInput = document.getElementById("selectedCategoryId");
+
+        if (tourTypeSelect) {
+            const currentText = tourTypeSelect.querySelector(".current");
+            const options = tourTypeSelect.querySelectorAll(".list .option");
+
+            options.forEach(option => {
+                option.addEventListener("click", function () {
+                    options.forEach(x => x.classList.remove("selected"));
+                    this.classList.add("selected");
+
+                    const selectedValue = this.getAttribute("data-value");
+                    const selectedText = this.textContent.trim();
+
+                    if (currentText) {
+                        currentText.textContent = selectedText;
+                    }
+
+                    if (hiddenCategoryInput) {
+                        hiddenCategoryInput.value = selectedValue;
+                    }
+                });
+            });
+        }
+
+        // Duration
+        const durationSelect = document.querySelector("#durationNiceSelect");
+        const hiddenDurationInput = document.getElementById("selectedDuration");
+
+        if (durationSelect) {
+            const currentText = durationSelect.querySelector(".current");
+            const options = durationSelect.querySelectorAll(".list .option");
+
+            options.forEach(option => {
+                option.addEventListener("click", function () {
+                    options.forEach(x => x.classList.remove("selected"));
+                    this.classList.add("selected");
+
+                    const selectedValue = this.getAttribute("data-value");
+                    const selectedText = this.textContent.trim();
+
+                    if (currentText) {
+                        currentText.textContent = selectedText;
+                    }
+
+                    if (hiddenDurationInput) {
+                        hiddenDurationInput.value = selectedValue;
+                    }
+                });
+            });
+        }
+    });
+</script>

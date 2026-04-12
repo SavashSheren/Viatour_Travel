@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<data name="Home" xml:space="preserve">
+    <value>Главная</value>
+  </data>
+	<data name="AsiaTours" xml:space="preserve">
+    <value>Туры по Азии</value>
+  </data>
+	<data name="EuropeTours" xml:space="preserve">
+    <value>Туры по Европе</value>
+  </data>
+	<data name="AmericaTours" xml:space="preserve">
+    <value>Туры по Америке</value>
+  </data>
+	<data name="AfricaTours" xml:space="preserve">
+    <value>Туры по Африке</value>
+  </data>
+	<data name="TourNotFound" xml:space="preserve">
+  <value>Тур не найден.</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Рекомендуемый</value>
+</data>
+	<data name="Day" xml:space="preserve">
+  <value>День</value>
+</data>
+	<data name="Maximum" xml:space="preserve">
+  <value>Максимум</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>Чел.</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>Отзыв</value>
+</data>
+	<data name="Overview" xml:space="preserve">
+  <value>Обзор</value>
+</data>
+	<data name="Program" xml:space="preserve">
+  <value>Программа</value>
+</data>
+	<data name="Gallery" xml:space="preserve">
+  <value>Галерея</value>
+</data>
+	<data name="Map" xml:space="preserve">
+  <value>Карта</value>
+</data>
+	<data name="Reviews" xml:space="preserve">
+  <value>Отзывы</value>
+</data>
+	<data name="Description" xml:space="preserve">
+  <value>Описание</value>
+</data>
+	<data name="TourInformation" xml:space="preserve">
+  <value>Информация о туре</value>
+</data>
+	<data name="Location" xml:space="preserve">
+  <value>Локация</value>
+</data>
+	<data name="TourDuration" xml:space="preserve">
+  <value>Длительность тура</value>
+</data>
+	<data name="MaximumCapacity" xml:space="preserve">
+  <value>Максимальная вместимость</value>
+</data>
+	<data name="Price" xml:space="preserve">
+  <value>Цена</value>
+</data>
+	<data name="DailyTourProgram" xml:space="preserve">
+  <value>Ежедневная программа тура</value>
+</data>
+	<data name="NoPlanAddedForThisTourYet" xml:space="preserve">
+  <value>Для этого тура пока не добавлен план.</value>
+</data>
+	<data name="NoGalleryImagesAddedForThisTourYet" xml:space="preserve">
+  <value>Для этого тура пока не добавлены изображения галереи.</value>
+</data>
+	<data name="MapLocation" xml:space="preserve">
+  <value>Карта / Локация</value>
+</data>
+	<data name="OverallAverage" xml:space="preserve">
+  <value>Средняя оценка</value>
+</data>
+	<data name="OutOf5" xml:space="preserve">
+  <value>Из 5</value>
+</data>
+	<data name="OverallScore" xml:space="preserve">
+  <value>Общая оценка</value>
+</data>
+	<data name="Score" xml:space="preserve">
+  <value>Оценка</value>
+</data>
+	<data name="GuestReviews" xml:space="preserve">
+  <value>Отзывы гостей</value>
+</data>
+	<data name="NoReviewsForThisTourYet" xml:space="preserve">
+  <value>Для этого тура пока нет отзывов.</value>
+</data>
+	<data name="BookThisTour" xml:space="preserve">
+  <value>Забронировать этот тур</value>
+</data>
+	<data name="StartingPrice" xml:space="preserve">
+  <value>Начальная цена</value>
+</data>
+	<data name="Duration" xml:space="preserve">
+  <value>Длительность</value>
+</data>
+	<data name="Capacity" xml:space="preserve">
+  <value>Вместимость</value>
+</data>
+	<data name="Contact" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+	<data name="BookingNow" xml:space="preserve">
+  <value>Забронировать</value>
+</data>
+
+	<data name="FollowUs" xml:space="preserve">
+  <value>Подписывайтесь :</value>
+</data>
+
+	<data name="SearchHere" xml:space="preserve">
+  <value>Поиск...</value>
+</data>
+
+	<data name="SignIn" xml:space="preserve">
+  <value>Войти</value>
+</data>
+
+	<data name="English" xml:space="preserve">
+  <value>Английский</value>
+</data>
+
+	<data name="Turkish" xml:space="preserve">
+  <value>Турецкий</value>
+</data>
+
+	<data name="Russian" xml:space="preserve">
+  <value>Русский</value>
+</data>
+	<data name="SearchTour" xml:space="preserve"><value>Найти тур</value></data>
+	<data name="SearchTourPlaceholder" xml:space="preserve"><value>Введите название тура...</value></data>
+	<data name="ArchiveTour" xml:space="preserve">
+  <value>Архив туров</value>
+</data>
+
+	<data name="TourPackage" xml:space="preserve">
+  <value>Турпакет</value>
+</data>
+
+	<data name="Destination" xml:space="preserve">
+  <value>Направление</value>
+</data>
+
+	<data name="Type" xml:space="preserve">
+  <value>Тип</value>
+</data>
+
+	<data name="Duration" xml:space="preserve">
+  <value>Длительность</value>
+</data>
+
+	<data name="Guests" xml:space="preserve">
+  <value>Гости</value>
+</data>
+
+	<data name="Search" xml:space="preserve">
+  <value>Поиск</value>
+</data>
+
+	<data name="BookingType" xml:space="preserve">
+  <value>Тип бронирования</value>
+</data>
+
+	<data name="DaysTour" xml:space="preserve">
+  <value>Тур на 2-4 дня</value>
+</data>
+
+	<data name="Showing" xml:space="preserve">
+  <value>Показано</value>
+</data>
+
+	<data name="Of" xml:space="preserve">
+  <value>из</value>
+</data>
+
+	<data name="Results" xml:space="preserve">
+  <value>результатов</value>
+</data>
+
+	<data name="Price" xml:space="preserve">
+  <value>Цена</value>
+</data>
+	<data name="New" xml:space="preserve">
+  <value>Новые</value>
+</data>
+	<data name="RecentlyAdded" xml:space="preserve">
+  <value>Недавно добавленные</value>
+</data>
+	<data name="Featured" xml:space="preserve">
+  <value>Популярное</value>
+</data>
+	<data name="UnitedStatesUSA" xml:space="preserve">
+  <value>Соединенные Штаты Америки</value>
+</data>
+	<data name="DaysAnd6Nights" xml:space="preserve">
+  <value>Дни и 6 ночей</value>
+</data>
+	<data name="FromMoscow" xml:space="preserve">
+  <value>Из Москвы</value>
+</data>
+	<data name="Review" xml:space="preserve">
+  <value>отзыв</value>
+</data>
+	<data name="Days" xml:space="preserve">
+  <value>дней</value>
+</data>
+	<data name="Person" xml:space="preserve">
+  <value>чел.</value>
+</data>
+	<data name="From" xml:space="preserve">
+  <value>От</value>
+</data>
+	<data name="AllDestinations" xml:space="preserve"><value>Все направления</value></data>
+	<data name="IstanbulTurkey" xml:space="preserve"><value>Стамбул, Турция</value></data>
+	<data name="ParisFrance" xml:space="preserve"><value>Париж, Франция</value></data>
+	<data name="RomeItaly" xml:space="preserve"><value>Рим, Италия</value></data>
+	<data name="BangkokThailand" xml:space="preserve"><value>Бангкок, Таиланд</value></data>
+
+	<data name="AllTourTypes" xml:space="preserve"><value>Все типы туров</value></data>
+	<data name="AnyDuration" xml:space="preserve"><value>Любая длительность</value></data>
+	<data name="OneToThreeDays" xml:space="preserve"><value>1-3 дня</value></data>
+	<data name="FourToSevenDays" xml:space="preserve"><value>4-7 дней</value></data>
+	<data name="EightToTwelveDays" xml:space="preserve"><value>8-12 дней</value></data>
+	<data name="MoreThanTwelveDays" xml:space="preserve"><value>12+ дней</value></data>
+</root>
+
+

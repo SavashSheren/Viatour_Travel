@@ -1,0 +1,407 @@
+﻿@model Viatour_Travel.Dtos.TourDtos.TourPlanDto
+
+@{
+    ViewData["Title"] = "Update Tour Plan";
+    Layout = "~/Views/Shared/_AdminTourLayout.cshtml";
+
+    var tourTitle = ViewBag.TourTitle?.ToString() ?? "Tour";
+    var dayCount = ViewBag.DayCount != null ? Convert.ToInt32(ViewBag.DayCount) : 0;
+}
+
+@section Styles {
+    <style>
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .page-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .page-title {
+            margin: 0;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+            .btn-back:hover {
+                background: var(--surface);
+                color: var(--navy);
+            }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @@media (max-width: 1100px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-card,
+        .side-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .form-card-header,
+        .side-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfd;
+        }
+
+        .form-card-body,
+        .side-card-body {
+            padding: 24px;
+        }
+
+        .form-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #e0f2fe;
+            color: #0369a1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .form-card-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 0;
+        }
+
+        .form-card-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 7px;
+        }
+
+            .form-label-custom .required {
+                color: var(--danger);
+                margin-left: 3px;
+            }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            font-size: 13.5px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color .18s, box-shadow .18s, background .18s;
+        }
+
+            .form-control-custom.with-icon {
+                padding-left: 38px;
+            }
+
+            .form-control-custom:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(45,156,219,.14);
+                background: #fafdff;
+            }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 140px;
+            line-height: 1.6;
+        }
+
+        .validation-msg {
+            font-size: 12px;
+            color: var(--danger);
+            margin-top: 5px;
+            display: block;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .field-hint i {
+                font-size: 12px;
+                color: var(--accent);
+            }
+
+        .submit-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 22px 24px;
+            margin-top: 20px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 11px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            box-shadow: 0 2px 12px rgba(45,156,219,.35);
+            margin-bottom: 10px;
+        }
+
+            .btn-submit:hover {
+                background: var(--accent-dk);
+            }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 12px;
+            background: none;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+        }
+
+            .btn-cancel:hover {
+                background: var(--surface);
+                color: var(--navy);
+            }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .info-item {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fcfdff;
+        }
+
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+    </style>
+}
+
+<div class="section-header">
+    <div>
+        <p class="page-eyebrow">Tour Plan Management</p>
+        <h1 class="page-title">Update Tour Plan</h1>
+        <p class="page-subtitle">
+            Edit the selected daily plan for <strong>@tourTitle</strong>.
+        </p>
+    </div>
+
+    <a href="/AdminTourPlan/Index?tourId=@Model.TourId" class="btn-back">
+        <i class="bi bi-arrow-left"></i>
+        Back to Plans
+    </a>
+</div>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="TourId" />
+    <input type="hidden" asp-for="TourPlanId" />
+
+    <div class="form-grid">
+        <div>
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="form-card-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <div>
+                        <p class="form-card-title">Plan Information</p>
+                        <p class="form-card-subtitle">Update the day title and description</p>
+                    </div>
+                </div>
+
+                <div class="form-card-body">
+                    <div class="mb-4">
+                        <label class="form-label-custom" for="DayNumber">
+                            Day Number <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-123 input-icon"></i>
+                            <input asp-for="DayNumber"
+                                   id="DayNumber"
+                                   type="number"
+                                   min="1"
+                                   class="form-control-custom with-icon"
+                                   placeholder="Enter day number" />
+                        </div>
+                        <p class="field-hint">
+                            <i class="bi bi-info-circle"></i>
+                            Example: 1 for Day 1, 2 for Day 2
+                        </p>
+                        <span asp-validation-for="DayNumber" class="validation-msg"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label-custom" for="Title">
+                            Plan Title <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-type input-icon"></i>
+                            <input asp-for="Title"
+                                   id="Title"
+                                   class="form-control-custom with-icon"
+                                   placeholder="e.g. Arrival and Hotel Check-in" />
+                        </div>
+                        <span asp-validation-for="Title" class="validation-msg"></span>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label-custom" for="Description">
+                            Description <span class="required">*</span>
+                        </label>
+                        <textarea asp-for="Description"
+                                  id="Description"
+                                  class="form-control-custom"
+                                  rows="6"
+                                  placeholder="Write the details of the selected day plan..."></textarea>
+                        <span asp-validation-for="Description" class="validation-msg"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-card">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-save-fill"></i>
+                    Update Plan
+                </button>
+                <a href="/AdminTourPlan/Index?tourId=@Model.TourId" class="btn-cancel">
+                    Cancel
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <div class="side-card">
+                <div class="side-card-header">
+                    <div>
+                        <p class="form-card-title">Tour Summary</p>
+                        <p class="form-card-subtitle">Context for this plan entry</p>
+                    </div>
+                </div>
+                <div class="side-card-body">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <div class="info-label">Tour Title</div>
+                            <div class="info-value">@tourTitle</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Total Duration</div>
+                            <div class="info-value">@dayCount Day(s)</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Editing Day</div>
+                            <div class="info-value">Day @Model.DayNumber</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
