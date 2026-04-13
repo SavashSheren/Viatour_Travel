@@ -4,10 +4,11 @@ using System.Globalization;
 using System.Reflection;
 using Viatour_Travel.Services.CategoryService;
 using Viatour_Travel.Services.ReviewService;
-using Viatour_Travel.Services.TourServices;
+using Viatour_Travel.Services.TourImageService;
 using Viatour_Travel.Services.TourPlanServices;
-using Viatour_Travel.Settings;
+using Viatour_Travel.Services.TourServices;
 using Viatour_Travel.Services.UploadService;
+using Viatour_Travel.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<ITourService, TourService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ITourPlanService, TourPlanManager>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<ITourImageService, TourImageService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

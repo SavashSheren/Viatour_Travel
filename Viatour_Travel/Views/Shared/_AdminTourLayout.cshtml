@@ -1,6 +1,7 @@
-﻿
-@{
+﻿@{
     Layout = null;
+    var currentPath = Context.Request.Path.Value?.ToLower() ?? "";
+    bool IsActive(params string[] paths) => paths.Any(x => currentPath.StartsWith(x.ToLower()));
 }
 
 <!DOCTYPE html>
@@ -8,510 +9,647 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] – Horizon Tours Admin</title>
+    <title>@ViewData["Title"] - Viatour Admin</title>
 
-    <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
 
     <style>
-        /* ─── CSS Variables ─────────────────────────────────────────── */
         :root {
-            --sidebar-w: 260px;
-            --sidebar-collapsed-w: 72px;
-            --navy:      #0d1b2a;
-            --navy-mid:  #112240;
-            --navy-lite: #1a3358;
-            --accent:    #2d9cdb;
-            --accent-dk: #1a7ab5;
-            --surface:   #f4f6fb;
-            --white:     #ffffff;
-            --border:    #e2e8f0;
-            --text-main: #1e293b;
-            --text-muted:#64748b;
-            --success:   #10b981;
-            --danger:    #ef4444;
-            --warning:   #f59e0b;
-            --sidebar-transition: 0.28s cubic-bezier(.4,0,.2,1);
-            --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
-            --shadow-md: 0 4px 16px rgba(13,27,42,.10);
-            --shadow-lg: 0 10px 40px rgba(13,27,42,.14);
+            --sidebar-w: 278px;
+            --sidebar-collapsed-w: 84px;
+            --navy: #0b1220;
+            --navy-2: #111c30;
+            --navy-3: #18263e;
+            --accent: #2563eb;
+            --accent-2: #3b82f6;
+            --accent-soft: rgba(37, 99, 235, .14);
+            --surface: #f6f8fc;
+            --surface-2: #eef3fb;
+            --white: #ffffff;
+            --border: #e5eaf2;
+            --text-main: #172033;
+            --text-muted: #6b7280;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, .05);
+            --shadow-md: 0 10px 30px rgba(15, 23, 42, .08);
+            --shadow-lg: 0 20px 55px rgba(15, 23, 42, .14);
+            --transition: .28s cubic-bezier(.4,0,.2,1);
         }
 
-        /* ─── Reset / Base ──────────────────────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--surface);
-            color: var(--text-main);
             margin: 0;
             min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(59,130,246,.07), transparent 28%), radial-gradient(circle at top right, rgba(16,185,129,.05), transparent 22%), var(--surface);
+            color: var(--text-main);
+            font-family: 'DM Sans', sans-serif;
             display: flex;
         }
 
-        a { text-decoration: none; }
+        a {
+            text-decoration: none;
+        }
 
-        /* ─── Sidebar ───────────────────────────────────────────────── */
         #sidebar {
             position: fixed;
-            top: 0; left: 0;
-            height: 100vh;
+            top: 0;
+            left: 0;
             width: var(--sidebar-w);
-            background: var(--navy);
-            display: flex;
-            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 55%, #0d1728 100%);
+            color: #fff;
             z-index: 1050;
-            transition: width var(--sidebar-transition);
+            transition: width var(--transition), transform var(--transition);
             overflow: hidden;
+            box-shadow: 8px 0 28px rgba(2, 8, 23, .24);
+            border-right: 1px solid rgba(255,255,255,.04);
         }
 
-        #sidebar.collapsed { width: var(--sidebar-collapsed-w); }
+            #sidebar.collapsed {
+                width: var(--sidebar-collapsed-w);
+            }
 
-        /* Brand */
         .sidebar-brand {
+            min-height: 78px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 20px 20px 18px;
+            gap: 14px;
+            padding: 18px 20px;
             border-bottom: 1px solid rgba(255,255,255,.07);
-            min-height: 70px;
-            overflow: hidden;
-            white-space: nowrap;
         }
 
         .brand-icon {
-            flex-shrink: 0;
-            width: 36px; height: 36px;
-            background: var(--accent);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(45,156,219,.4);
-        }
-
-        .brand-text {
-            display: flex; flex-direction: column;
-            opacity: 1;
-            transition: opacity .2s;
-        }
-
-        .brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px;
-            color: #fff;
-            line-height: 1.2;
-        }
-
-        .brand-sub {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: rgba(255,255,255,.4);
-        }
-
-        #sidebar.collapsed .brand-text { opacity: 0; pointer-events: none; }
-
-        /* Nav */
-        .sidebar-nav {
-            flex: 1;
-            padding: 12px 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar-nav::-webkit-scrollbar { width: 4px; }
-        .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
-
-        .nav-section-label {
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.6px;
-            color: rgba(255,255,255,.3);
-            padding: 14px 22px 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            transition: opacity .2s;
-        }
-
-        #sidebar.collapsed .nav-section-label { opacity: 0; }
-
-        .nav-item-link {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-2), #1d4ed8);
             display: flex;
             align-items: center;
-            gap: 13px;
-            padding: 11px 22px;
-            color: rgba(255,255,255,.65);
-            font-size: 14px;
-            font-weight: 500;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, .35);
+        }
+
+        .brand-meta {
+            display: flex;
+            flex-direction: column;
+            transition: opacity .2s ease;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            line-height: 1.1;
+            color: #fff;
+            margin: 0;
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            color: rgba(255,255,255,.45);
+            font-weight: 700;
+        }
+
+        #sidebar.collapsed .brand-meta {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sidebar-nav {
+            height: calc(100vh - 78px - 72px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 12px 0 18px;
+        }
+
+            .sidebar-nav::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .sidebar-nav::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,.14);
+                border-radius: 10px;
+            }
+
+        .nav-section-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.32);
+            padding: 16px 22px 8px;
+            transition: opacity .2s ease;
             white-space: nowrap;
-            border-radius: 0;
-            transition: background .18s, color .18s, padding .28s;
+        }
+
+        #sidebar.collapsed .nav-section-title {
+            opacity: 0;
+        }
+
+        .nav-item-link {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 16px;
+            color: rgba(255,255,255,.72);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all .2s ease;
+            white-space: nowrap;
+        }
+
+            .nav-item-link i {
+                width: 22px;
+                min-width: 22px;
+                text-align: center;
+                font-size: 17px;
+                transition: transform .2s ease;
+            }
+
+            .nav-item-link:hover {
+                color: #fff;
+                background: rgba(255,255,255,.08);
+                transform: translateX(2px);
+            }
+
+                .nav-item-link:hover i {
+                    transform: scale(1.06);
+                }
+
+            .nav-item-link.active {
+                color: #fff;
+                background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(59,130,246,.92));
+                box-shadow: 0 12px 24px rgba(37, 99, 235, .22);
+            }
+
+                .nav-item-link.active::before {
+                    content: "";
+                    position: absolute;
+                    left: -12px;
+                    top: 10px;
+                    bottom: 10px;
+                    width: 4px;
+                    border-radius: 0 999px 999px 0;
+                    background: #fff;
+                }
+
+        .nav-label {
+            transition: opacity .2s ease, width .2s ease;
+        }
+
+        #sidebar.collapsed .nav-label {
+            opacity: 0;
+            width: 0;
             overflow: hidden;
         }
 
-        .nav-item-link i {
-            flex-shrink: 0;
-            font-size: 17px;
-            width: 22px;
-            text-align: center;
-            transition: transform .2s;
-        }
-
-        .nav-item-link:hover {
-            background: rgba(255,255,255,.07);
-            color: #fff;
-        }
-
-        .nav-item-link:hover i { transform: translateX(2px); }
-
-        .nav-item-link.active {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: inset 4px 0 0 rgba(255,255,255,.3);
-        }
-
-        .nav-item-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0;
-            width: 3px; height: 100%;
-            background: #fff;
-            border-radius: 0 3px 3px 0;
-        }
-
-        .nav-label { transition: opacity .2s, width .28s; }
-        #sidebar.collapsed .nav-label { opacity: 0; width: 0; overflow: hidden; }
-
-        /* Sidebar footer */
         .sidebar-footer {
-            padding: 14px 0;
+            height: 72px;
             border-top: 1px solid rgba(255,255,255,.07);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
         }
 
-        /* Tooltip for collapsed */
-        [data-bs-toggle="tooltip"] { position: relative; }
-
-        /* ─── Main Wrapper ───────────────────────────────────────────── */
         #main-wrapper {
             margin-left: var(--sidebar-w);
-            flex: 1;
+            width: calc(100% - var(--sidebar-w));
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            transition: margin-left var(--sidebar-transition);
+            transition: margin-left var(--transition), width var(--transition);
         }
 
-        #main-wrapper.expanded { margin-left: var(--sidebar-collapsed-w); }
+            #main-wrapper.expanded {
+                margin-left: var(--sidebar-collapsed-w);
+                width: calc(100% - var(--sidebar-collapsed-w));
+            }
 
-        /* ─── Top Navbar ─────────────────────────────────────────────── */
         #topbar {
             position: sticky;
             top: 0;
             z-index: 1040;
-            height: 70px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
+            min-height: 78px;
             display: flex;
             align-items: center;
-            padding: 0 24px;
             gap: 16px;
+            padding: 14px 24px;
+            background: rgba(255,255,255,.82);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(226,232,240,.8);
             box-shadow: var(--shadow-sm);
         }
 
         .btn-toggle-sidebar {
-            background: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            width: 38px; height: 38px;
-            display: flex; align-items: center; justify-content: center;
+            background: #fff;
             color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: background .15s, color .15s;
-            flex-shrink: 0;
+            transition: all .2s ease;
+            box-shadow: var(--shadow-sm);
         }
 
-        .btn-toggle-sidebar:hover { background: var(--surface); color: var(--navy); }
+            .btn-toggle-sidebar:hover {
+                background: var(--surface-2);
+                color: var(--accent);
+                border-color: #d9e3f2;
+            }
+
+        .topbar-title-wrap {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar-mini-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            color: var(--text-muted);
+        }
+
+        .topbar-page-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 2px 0 0;
+            line-height: 1.1;
+        }
 
         .topbar-search {
             flex: 1;
             max-width: 380px;
+            margin-left: 10px;
             position: relative;
         }
 
-        .topbar-search input {
-            width: 100%;
-            padding: 9px 16px 9px 40px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--surface);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13.5px;
-            color: var(--text-main);
-            transition: border-color .15s, box-shadow .15s;
-            outline: none;
-        }
+            .topbar-search input {
+                width: 100%;
+                border: 1px solid var(--border);
+                background: #fff;
+                border-radius: 14px;
+                padding: 11px 16px 11px 42px;
+                font-size: 14px;
+                color: var(--text-main);
+                outline: none;
+                transition: all .2s ease;
+                box-shadow: var(--shadow-sm);
+            }
 
-        .topbar-search input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(45,156,219,.15);
-            background: #fff;
-        }
+                .topbar-search input:focus {
+                    border-color: rgba(37,99,235,.45);
+                    box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+                }
 
-        .topbar-search .search-icon {
-            position: absolute;
-            left: 13px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 15px;
-            pointer-events: none;
-        }
+            .topbar-search i {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--text-muted);
+                font-size: 15px;
+            }
 
-        .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+        .topbar-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         .topbar-icon-btn {
-            width: 40px; height: 40px;
-            border: none;
-            border-radius: 10px;
-            background: none;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 12px;
             color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
-            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             position: relative;
-            transition: background .15s, color .15s;
+            transition: all .2s ease;
+            box-shadow: var(--shadow-sm);
         }
 
-        .topbar-icon-btn:hover { background: var(--surface); color: var(--navy); }
+            .topbar-icon-btn:hover {
+                background: var(--surface-2);
+                color: var(--accent);
+            }
 
         .notif-badge {
             position: absolute;
-            top: 7px; right: 7px;
-            width: 8px; height: 8px;
+            top: 8px;
+            right: 8px;
+            width: 9px;
+            height: 9px;
             background: var(--danger);
             border-radius: 50%;
             border: 2px solid #fff;
         }
 
-        .topbar-divider {
-            width: 1px; height: 28px;
-            background: var(--border);
-            margin: 0 6px;
-        }
-
         .admin-profile-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 6px 10px 6px 6px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            background: none;
+            background: #fff;
+            border-radius: 14px;
+            padding: 6px 10px 6px 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             cursor: pointer;
-            transition: background .15s;
+            transition: all .2s ease;
+            box-shadow: var(--shadow-sm);
         }
 
-        .admin-profile-btn:hover { background: var(--surface); }
+            .admin-profile-btn:hover {
+                background: var(--surface-2);
+            }
 
         .admin-avatar {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--accent), var(--navy-lite));
-            display: flex; align-items: center; justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
             color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(37,99,235,.25);
+        }
+
+        .admin-info {
+            text-align: left;
+        }
+
+        .admin-name {
             font-size: 13px;
             font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.1;
         }
 
-        .admin-info { text-align: left; }
-        .admin-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
-        .admin-role { font-size: 11px; color: var(--text-muted); }
+        .admin-role {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
 
-        /* ─── Content Area ───────────────────────────────────────────── */
         #content-area {
+            padding: 28px;
             flex: 1;
-            padding: 28px 28px 40px;
         }
 
-        /* ─── Breadcrumb / Page Header ───────────────────────────────── */
-        .page-header {
-            margin-bottom: 24px;
+        .page-shell {
+            background: rgba(255,255,255,.72);
+            border: 1px solid rgba(226,232,240,.75);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            padding: 24px;
         }
 
-        .page-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: var(--navy);
-            margin: 0 0 4px;
+        #sidebar-backdrop {
+            display: none;
         }
 
-        .breadcrumb {
-            font-size: 12.5px;
-            margin: 0;
-        }
-
-        .breadcrumb-item + .breadcrumb-item::before { color: var(--text-muted); }
-
-        /* ─── Responsive ─────────────────────────────────────────────── */
         @@media (max-width: 991.98px) {
             #sidebar {
                 transform: translateX(-100%);
-                transition: transform var(--sidebar-transition), width var(--sidebar-transition);
             }
-            #sidebar.mobile-open { transform: translateX(0); width: var(--sidebar-w) !important; }
-            #main-wrapper { margin-left: 0 !important; }
+
+                #sidebar.mobile-open {
+                    transform: translateX(0);
+                    width: var(--sidebar-w) !important;
+                }
+
+            #main-wrapper,
+            #main-wrapper.expanded {
+                margin-left: 0;
+                width: 100%;
+            }
+
             #sidebar-backdrop {
-                display: none;
-                position: fixed; inset: 0;
-                background: rgba(0,0,0,.45);
+                position: fixed;
+                inset: 0;
+                background: rgba(2, 8, 23, .48);
                 z-index: 1049;
             }
-            #sidebar-backdrop.show { display: block; }
+
+                #sidebar-backdrop.show {
+                    display: block;
+                }
+
+            .topbar-search {
+                display: none;
+            }
+
+            #content-area {
+                padding: 18px;
+            }
+
+            .page-shell {
+                padding: 18px;
+                border-radius: 18px;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            #topbar {
+                padding: 12px 14px;
+            }
+
+            .topbar-page-title {
+                font-size: 17px;
+            }
+
+            .admin-info {
+                display: none;
+            }
+
+            #content-area {
+                padding: 14px;
+            }
         }
     </style>
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-
-    <!-- ═══ SIDEBAR ════════════════════════════════════════════════════ -->
     <aside id="sidebar">
-        <!-- Brand -->
         <div class="sidebar-brand">
-            <div class="brand-icon"><i class="bi bi-compass"></i></div>
-            <div class="brand-text">
-                <span class="brand-name">Horizon Tours</span>
-                <span class="brand-sub">Admin Panel</span>
+            <div class="brand-icon">
+                <i class="bi bi-compass-fill"></i>
+            </div>
+            <div class="brand-meta">
+                <span class="brand-title">Viatour</span>
+                <span class="brand-subtitle">Admin Panel</span>
             </div>
         </div>
 
-        <!-- Navigation -->
         <nav class="sidebar-nav">
-            <div class="nav-section-label">Main</div>
+            <div class="nav-section-title">Main</div>
 
-            <a href="/admin" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+            <a href="/Dashboard/Index"
+               class="nav-item-link @(IsActive("/dashboard") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Dashboard">
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span class="nav-label">Dashboard</span>
             </a>
 
-            <a href="/admin/tours" class="nav-item-link active" data-bs-toggle="tooltip" data-bs-placement="right" title="Tours">
+            <a href="/AdminTour/TourList"
+               class="nav-item-link @(IsActive("/admintour") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Tours">
                 <i class="bi bi-map-fill"></i>
                 <span class="nav-label">Tours</span>
             </a>
-
-            <a href="/admin/reservations" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Reservations">
+            <a href="/AdminReservation/Index"
+               class="nav-item-link @(IsActive("/adminreservation") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Reservations">
                 <i class="bi bi-calendar2-check-fill"></i>
                 <span class="nav-label">Reservations</span>
             </a>
 
-            <a href="/admin/customers" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Customers">
-                <i class="bi bi-people-fill"></i>
-                <span class="nav-label">Customers</span>
+            <a href="/AdminCategory/Index"
+               class="nav-item-link @(IsActive("/admincategory") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Categories">
+                <i class="bi bi-tags-fill"></i>
+                <span class="nav-label">Categories</span>
             </a>
 
-            <a href="/admin/guides" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Guides">
-                <i class="bi bi-person-badge-fill"></i>
-                <span class="nav-label">Guides</span>
+            <a href="/Review/Index"
+               class="nav-item-link @(IsActive("/review") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Reviews">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span class="nav-label">Reviews</span>
             </a>
 
-            <a href="/admin/destinations" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Destinations">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span class="nav-label">Destinations</span>
+            <div class="nav-section-title">Management</div>
+
+            <a href="/AdminTour/TourList"
+               class="nav-item-link @(IsActive("/admintourimage") ? "active" : "")"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Gallery">
+                <i class="bi bi-images"></i>
+                <span class="nav-label">Gallery</span>
             </a>
 
-            <div class="nav-section-label">Analytics</div>
+            <div class="nav-section-title">System</div>
 
-            <a href="/admin/reports" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
-                <i class="bi bi-bar-chart-line-fill"></i>
-                <span class="nav-label">Reports</span>
-            </a>
-
-            <div class="nav-section-label">System</div>
-
-            <a href="/admin/settings" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings">
-                <i class="bi bi-gear-fill"></i>
-                <span class="nav-label">Settings</span>
+            <a href="/Tour/TourList"
+               class="nav-item-link"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Go Site">
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span class="nav-label">View Site</span>
             </a>
         </nav>
 
-        <!-- Sidebar Footer / Logout -->
         <div class="sidebar-footer">
-            <a href="/account/logout" class="nav-item-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">
-                <i class="bi bi-box-arrow-left" style="color:var(--danger);"></i>
-                <span class="nav-label" style="color:rgba(255,255,255,.55);">Logout</span>
+            <a href="/Login/Logout"
+               class="nav-item-link"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Logout">
+                <i class="bi bi-box-arrow-left" style="color:#f87171;"></i>
+                <span class="nav-label">Logout</span>
             </a>
         </div>
     </aside>
 
-    <!-- Backdrop (mobile) -->
     <div id="sidebar-backdrop"></div>
 
-    <!-- ═══ MAIN WRAPPER ════════════════════════════════════════════════ -->
     <div id="main-wrapper">
-
-        <!-- ── TOPBAR ─────────────────────────────────────────────── -->
         <header id="topbar">
-            <!-- Toggle sidebar -->
-            <button class="btn-toggle-sidebar" id="btnToggleSidebar" aria-label="Toggle sidebar">
+            <button class="btn-toggle-sidebar" id="btnToggleSidebar" type="button" aria-label="Toggle sidebar">
                 <i class="bi bi-layout-sidebar-inset"></i>
             </button>
 
-            <!-- Search -->
-            <div class="topbar-search d-none d-md-block">
-                <i class="bi bi-search search-icon"></i>
-                <input type="text" placeholder="Search anything…" />
+            <div class="topbar-title-wrap">
+                <span class="topbar-mini-label">Administration</span>
+                <h1 class="topbar-page-title">@ViewData["Title"]</h1>
             </div>
 
-            <!-- Right actions -->
-            <div class="topbar-actions">
-                <!-- Search (mobile) -->
-                <button class="topbar-icon-btn d-md-none" aria-label="Search">
-                    <i class="bi bi-search"></i>
-                </button>
+            <div class="topbar-search">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search in admin panel..." />
+            </div>
 
-                <!-- Notifications -->
-                <button class="topbar-icon-btn" aria-label="Notifications">
+            <div class="topbar-actions">
+                <button class="topbar-icon-btn" type="button" aria-label="Notifications">
                     <i class="bi bi-bell-fill"></i>
                     <span class="notif-badge"></span>
                 </button>
 
-                <!-- Messages -->
-                <button class="topbar-icon-btn d-none d-sm-flex" aria-label="Messages">
+                <button class="topbar-icon-btn d-none d-sm-flex" type="button" aria-label="Messages">
                     <i class="bi bi-chat-dots-fill"></i>
                 </button>
 
-                <div class="topbar-divider d-none d-sm-block"></div>
-
-                <!-- Admin Profile Dropdown -->
                 <div class="dropdown">
-                    <button class="admin-profile-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="admin-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="admin-avatar">A</div>
-                        <div class="admin-info d-none d-sm-block">
+                        <div class="admin-info">
                             <div class="admin-name">Admin User</div>
-                            <div class="admin-role">Super Admin</div>
+                            <div class="admin-role">Administrator</div>
                         </div>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end mt-1" style="min-width:190px; border-radius:12px; border-color:var(--border); box-shadow:var(--shadow-md);">
+
+                    <ul class="dropdown-menu dropdown-menu-end mt-2 border-0 shadow" style="border-radius:16px; min-width:200px;">
                         <li>
-                            <a class="dropdown-item" href="/admin/profile">
+                            <a class="dropdown-item py-2" href="#">
                                 <i class="bi bi-person-circle me-2 text-muted"></i> My Profile
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/admin/settings">
+                            <a class="dropdown-item py-2" href="#">
                                 <i class="bi bi-gear me-2 text-muted"></i> Settings
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
                         <li>
-                            <a class="dropdown-item text-danger" href="/account/logout">
+                            <a class="dropdown-item py-2 text-danger" href="/Login/Logout">
                                 <i class="bi bi-box-arrow-right me-2"></i> Logout
                             </a>
                         </li>
@@ -520,62 +658,72 @@
             </div>
         </header>
 
-        <!-- ── CONTENT ─────────────────────────────────────────────── -->
         <main id="content-area">
-            @RenderBody()
+            <div class="page-shell">
+                @RenderBody()
+            </div>
         </main>
+    </div>
 
-    </div><!-- /main-wrapper -->
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ── Sidebar Toggle ─────────────────────────────────────────────
-        const sidebar   = document.getElementById('sidebar');
-        const wrapper   = document.getElementById('main-wrapper');
-        const backdrop  = document.getElementById('sidebar-backdrop');
+        const sidebar = document.getElementById('sidebar');
+        const wrapper = document.getElementById('main-wrapper');
+        const backdrop = document.getElementById('sidebar-backdrop');
         const btnToggle = document.getElementById('btnToggleSidebar');
+        let tooltips = [];
 
-        function isMobile() { return window.innerWidth < 992; }
+        function isMobile() {
+            return window.innerWidth < 992;
+        }
 
-        btnToggle.addEventListener('click', () => {
+        function disposeTooltips() {
+            tooltips.forEach(t => t.dispose());
+            tooltips = [];
+        }
+
+        function initCollapsedTooltips() {
+            disposeTooltips();
+
+            if (!isMobile() && sidebar.classList.contains('collapsed')) {
+                document.querySelectorAll('#sidebar [data-bs-toggle="tooltip"]').forEach(el => {
+                    tooltips.push(new bootstrap.Tooltip(el));
+                });
+            }
+        }
+
+        function handleSidebarToggle() {
             if (isMobile()) {
                 sidebar.classList.toggle('mobile-open');
                 backdrop.classList.toggle('show');
             } else {
                 sidebar.classList.toggle('collapsed');
                 wrapper.classList.toggle('expanded');
-                // Disable/enable tooltips based on state
-                updateTooltips();
+                initCollapsedTooltips();
             }
-        });
+        }
 
-        backdrop.addEventListener('click', () => {
+        btnToggle?.addEventListener('click', handleSidebarToggle);
+
+        backdrop?.addEventListener('click', function () {
             sidebar.classList.remove('mobile-open');
             backdrop.classList.remove('show');
         });
 
-        // ── Bootstrap Tooltips (collapsed mode) ───────────────────────
-        let tooltipInstances = [];
-
-        function updateTooltips() {
-            tooltipInstances.forEach(t => t.dispose());
-            tooltipInstances = [];
-            if (sidebar.classList.contains('collapsed')) {
-                document.querySelectorAll('#sidebar [data-bs-toggle="tooltip"]').forEach(el => {
-                    tooltipInstances.push(new bootstrap.Tooltip(el, { trigger: 'hover' }));
-                });
+        window.addEventListener('resize', function () {
+            if (!isMobile()) {
+                sidebar.classList.remove('mobile-open');
+                backdrop.classList.remove('show');
             }
-        }
+            initCollapsedTooltips();
+        });
 
-        // Disable tooltips on large screens by default (sidebar expanded)
-        document.querySelectorAll('#sidebar [data-bs-toggle="tooltip"]').forEach(el => {
-            el.removeAttribute('data-bs-toggle');
-            el.dataset.bsToggleTooltip = 'tooltip'; // stash
+        document.addEventListener('DOMContentLoaded', function () {
+            initCollapsedTooltips();
         });
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-

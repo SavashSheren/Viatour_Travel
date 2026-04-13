@@ -2,6 +2,7 @@
 using Viatour_Travel.Dtos.CategoryDtos;
 using Viatour_Travel.Dtos.ReviewDtos;
 using Viatour_Travel.Dtos.TourDtos;
+using Viatour_Travel.Dtos.TourImageDtos;
 using Viatour_Travel.Entities;
 
 namespace Viatour_Travel.Mapping
@@ -28,6 +29,8 @@ namespace Viatour_Travel.Mapping
             CreateMap<Review, ResultReviewByTourIdDto>().ReverseMap();
             CreateMap<TourPlan, TourPlanDto>().ReverseMap();
             CreateMap<GetTourByIdDto, UpdateTourDto>().ReverseMap();
+            CreateMap<TourImage, ResultTourImageDto>().ReverseMap();
+            CreateMap<TourImage, CreateTourImageDto>().ReverseMap();
         }
     }
 }
