@@ -2,12 +2,10 @@
 {
     public class CreateReviewDto
     {
-        public String ReviewId { get; set; }
-        public String NameSurname { get; set; }
-        public String Detail { get; set; }
+        public string NameSurname { get; set; } = null!;
+        public string Detail { get; set; } = null!;
         public int Score { get; set; }
-        public DateTime ReviewDate { get; set; }
         public bool Status { get; set; }
-        public String TourId { get; set; }
+        public string TourId { get; set; } = null!;
     }
 }

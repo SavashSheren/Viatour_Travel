@@ -24,9 +24,9 @@ namespace Viatour_Travel.Mapping
 
             CreateMap<Review, CreateReviewDto>().ReverseMap();
             CreateMap<Review, ResultReviewDto>().ReverseMap();
-            CreateMap<Review, UpdateReviewDto>().ReverseMap();
-            CreateMap<Review, GetReviewById>().ReverseMap();
             CreateMap<Review, ResultReviewByTourIdDto>().ReverseMap();
+            CreateMap<Review, GetReviewByIdDto>().ReverseMap();
+
             CreateMap<TourPlan, TourPlanDto>().ReverseMap();
             CreateMap<GetTourByIdDto, UpdateTourDto>().ReverseMap();
             CreateMap<TourImage, ResultTourImageDto>().ReverseMap();

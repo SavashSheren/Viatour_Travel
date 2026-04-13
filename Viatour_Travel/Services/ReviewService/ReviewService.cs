@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MongoDB.Driver;
-using Viatour_Travel.Dtos.CategoryDtos;
 using Viatour_Travel.Dtos.ReviewDtos;
 using Viatour_Travel.Entities;
 using Viatour_Travel.Settings;
@@ -9,50 +8,71 @@ namespace Viatour_Travel.Services.ReviewService
 {
     public class ReviewService : IReviewService
     {
-
         private readonly IMapper _mapper;
         private readonly IMongoCollection<Review> _reviewCollection;
-        public ReviewService(IMapper mapper, IDatabaseSettings _databaseSettings)
+
+        public ReviewService(IMapper mapper, IDatabaseSettings databaseSettings)
         {
-            var client = new MongoClient(_databaseSettings.ConnectionString);
-            var database = client.GetDatabase(_databaseSettings.DatabaseName);
-            _reviewCollection = database.GetCollection<Review>(_databaseSettings.ReviewCollectionName);
+            var client = new MongoClient(databaseSettings.ConnectionString);
+            var database = client.GetDatabase(databaseSettings.DatabaseName);
+            _reviewCollection = database.GetCollection<Review>(databaseSettings.ReviewCollectionName);
             _mapper = mapper;
         }
+
         public async Task CreateReviewAsync(CreateReviewDto createReviewDto)
         {
             var value = _mapper.Map<Review>(createReviewDto);
+            value.ReviewDate = DateTime.UtcNow;
+            value.Status = false;
+
             await _reviewCollection.InsertOneAsync(value);
         }
 
-        public async Task DeleteReviewAsync(string id)
+        public async Task<List<ResultReviewDto>> GetAllReviewsAsync()
         {
-            await _reviewCollection.DeleteOneAsync(x => x.ReviewId == id);
+            var values = await _reviewCollection
+                .Find(x => true)
+                .SortByDescending(x => x.ReviewDate)
+                .ToListAsync();
+
+            return _mapper.Map<List<ResultReviewDto>>(values);
         }
 
-        public async Task<List<ResultReviewDto>> GetAllReviewAsync()
+        public async Task<List<ResultReviewByTourIdDto>> GetAllReviewsByTourIdAsync(string tourId)
         {
+            var values = await _reviewCollection
+                .Find(x => x.TourId == tourId && x.Status)
+                .SortByDescending(x => x.ReviewDate)
+                .ToListAsync();
 
-            var Value = await _reviewCollection.Find(x => true).ToListAsync();
-            return _mapper.Map<List<ResultReviewDto>>(Value);
-        }
-
-        public async Task<List<ResultReviewByTourIdDto>> GetAllReviewsByTourIdAsync(string id)
-        {
-            var values = await _reviewCollection.Find(x => x.TourId == id).ToListAsync();
             return _mapper.Map<List<ResultReviewByTourIdDto>>(values);
         }
 
-        public async Task<GetReviewById> GetReviewById(string id)
+        public async Task<GetReviewByIdDto?> GetReviewByIdAsync(string reviewId)
         {
-            var value = await _reviewCollection.Find(x => x.ReviewId == id).FirstOrDefaultAsync();
-            return _mapper.Map<GetReviewById>(value);
+            var value = await _reviewCollection
+                .Find(x => x.ReviewId == reviewId)
+                .FirstOrDefaultAsync();
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<GetReviewByIdDto>(value);
         }
 
-        public async Task UpdateReviewAsync(UpdateReviewDto updateReviewDto)
+        public async Task ApproveReviewAsync(string reviewId)
         {
-            var value = _mapper.Map<Review>(updateReviewDto);
-            await _reviewCollection.FindOneAndReplaceAsync(x => x.ReviewId == updateReviewDto.ReviewId, value);
+            var filter = Builders<Review>.Filter.Eq(x => x.ReviewId, reviewId);
+            var update = Builders<Review>.Update.Set(x => x.Status, true);
+
+            await _reviewCollection.UpdateOneAsync(filter, update);
+        }
+
+        public async Task DeleteReviewAsync(string reviewId)
+        {
+            await _reviewCollection.DeleteOneAsync(x => x.ReviewId == reviewId);
         }
     }
 }

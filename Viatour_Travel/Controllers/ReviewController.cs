@@ -7,28 +7,56 @@ namespace Viatour_Travel.Controllers
     public class ReviewController : Controller
     {
         private readonly IReviewService _reviewService;
-public ReviewController(IReviewService reviewService)
+
+        public ReviewController(IReviewService reviewService)
         {
             _reviewService = reviewService;
         }
 
-        public IActionResult CreateReview()
+        [HttpGet]
+        public IActionResult CreateReview(string tourId)
         {
-            return View();
+            var model = new CreateReviewDto
+            {
+                TourId = tourId
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateReview(CreateReviewDto createReviewDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => string.IsNullOrWhiteSpace(x.ErrorMessage) ? "Invalid field." : x.ErrorMessage)
+                    .ToList();
+
+                TempData["ErrorMessage"] = string.Join(" | ", errors);
+                return View(createReviewDto);
+            }
+
             createReviewDto.Status = false;
+
             await _reviewService.CreateReviewAsync(createReviewDto);
-            return RedirectToAction("ReviewList");
+
+            TempData["SuccessMessage"] = "Your review has been submitted successfully and is waiting for approval.";
+
+            return Redirect($"/Tour/TourDetail/{createReviewDto.TourId}?tab=reviews");
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetReviewByTourId(string id)
         {
-            var value = await _reviewService.GetAllReviewsByTourIdAsync(id);
-            return View(value);
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Tour id is required.");
+            }
 
+            var values = await _reviewService.GetAllReviewsByTourIdAsync(id);
+            return View(values);
         }
     }
 }

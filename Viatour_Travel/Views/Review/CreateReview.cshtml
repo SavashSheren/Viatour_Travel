@@ -1,430 +1,357 @@
-﻿@model CreateReviewDto
+﻿@model Viatour_Travel.Dtos.ReviewDtos.CreateReviewDto
+
 @{
-    Layout = null;
+    ViewData["Title"] = "Write a Review";
+    Layout = "~/Views/Shared/_TourLayout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Tour Review</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-    <style>
-        :root {
-            --primary: #1a6b4a;
-            --primary-dark: #134d36;
-            --primary-light: #e8f5ef;
-            --accent: #f4a623;
-            --accent-hover: #e09418;
-            --text-muted-custom: #6c757d;
-            --card-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        body {
-            background: linear-gradient(135deg, #e8f5ef 0%, #d4edda 40%, #c8e6f5 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-
-        .page-wrapper {
-            width: 100%;
-            max-width: 680px;
-        }
-
-        .brand-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .brand-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--primary), #2d9e6e);
-            border-radius: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 24px rgba(26,107,74,0.3);
-        }
-
-            .brand-icon i {
-                font-size: 1.8rem;
-                color: #fff;
-            }
-
-        .brand-header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1a2e22;
-            margin-bottom: 0.3rem;
-        }
-
-        .brand-header p {
-            color: var(--text-muted-custom);
-            font-size: 0.95rem;
-        }
-
-        .review-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-
-        /* Form Labels */
-        .form-label {
-            font-weight: 600;
-            color: #2c3e35;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-            .form-label i {
-                color: var(--primary);
-                font-size: 1rem;
-            }
-
-        /* Inputs */
-        .form-control, .form-select {
-            border: 1.5px solid #dee2e6;
-            border-radius: 10px;
-            padding: 0.65rem 1rem;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background-color: #fafafa;
-        }
-
-            .form-control:focus, .form-select:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
-                background-color: #fff;
-                outline: none;
-            }
-
-            .form-control::placeholder {
-                color: #adb5bd;
-                font-size: 0.88rem;
-            }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 130px;
-        }
-
-        /* Star Rating */
-        .star-rating-label {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            color: #2c3e35;
-            font-size: 0.9rem;
-            margin-bottom: 0.6rem;
-        }
-
-            .star-rating-label i {
-                color: var(--primary);
-            }
-
-        .star-rating-wrapper {
-            background: #fafafa;
-            border: 1.5px solid #dee2e6;
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: border-color 0.2s;
-        }
-
-            .star-rating-wrapper:hover {
-                border-color: var(--primary);
-            }
-
-        .star-rating {
-            display: flex;
-            flex-direction: row-reverse;
-            gap: 4px;
-        }
-
-            .star-rating input[type="radio"] {
-                display: none;
-            }
-
-            .star-rating label {
-                cursor: pointer;
-                font-size: 2rem;
-                color: #dee2e6;
-                transition: color 0.15s, transform 0.15s;
-                line-height: 1;
-            }
-
-                .star-rating label:hover,
-                .star-rating label:hover ~ label,
-                .star-rating input:checked ~ label {
-                    color: var(--accent);
-                }
-
-                .star-rating label:hover {
-                    transform: scale(1.2);
-                }
-
-            .star-rating input:checked + label {
-                transform: scale(1.1);
-            }
-
-        .star-hint {
-            font-size: 0.8rem;
-            color: var(--text-muted-custom);
-            margin-left: 0.5rem;
-        }
-
-        #starScoreText {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent);
-            min-width: 80px;
-        }
-
-        /* Divider */
-        .section-divider {
-            border: none;
-            border-top: 1.5px dashed #e9ecef;
-            margin: 1.5rem 0;
-        }
-
-        /* Submit Button */
-        .btn-submit {
-            background: linear-gradient(135deg, var(--primary) 0%, #2d9e6e 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.85rem 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
-            letter-spacing: 0.3px;
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-            box-shadow: 0 6px 20px rgba(26,107,74,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-            .btn-submit::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-                transition: left 0.4s;
-            }
-
-            .btn-submit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 28px rgba(26,107,74,0.4);
-                background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-                color: #fff;
-            }
-
-                .btn-submit:hover::before {
-                    left: 100%;
-                }
-
-            .btn-submit:active {
-                transform: translateY(0);
-            }
-
-            .btn-submit i {
-                font-size: 1.1rem;
-            }
-
-        /* Validation */
-        .invalid-feedback {
-            font-size: 0.82rem;
-        }
-
-        .is-invalid {
-            border-color: #dc3545 !important;
-        }
-
-        /* Info badge */
-        .tour-info-badge {
-            background: var(--primary-light);
-            border: 1px solid #a8d5bc;
-            border-radius: 8px;
-            padding: 0.5rem 0.9rem;
-            font-size: 0.82rem;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin-bottom: 1.5rem;
-        }
-
-        @@media (max-width: 576px) {
-            .review-card {
-                padding: 1.5rem;
-            }
-
-            .star-rating label {
-                font-size: 1.7rem;
-            }
-
-            .brand-header h1 {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="page-wrapper">
-
-        <!-- Header -->
-        <div class="brand-header">
-            <div class="brand-icon">
-                <i class="bi bi-airplane-engines-fill"></i>
+<section class="review-create-page">
+    <div class="tf-container">
+        <div class="review-create-shell">
+            <div class="review-create-header">
+                <span class="review-create-badge">GUEST FEEDBACK</span>
+                <h1 class="review-create-title">Write a Review</h1>
+                <p class="review-create-subtitle">
+                    Share your experience for this tour. Your review will be submitted for admin approval before it becomes visible.
+                </p>
             </div>
-            <h1>Add Tour Review</h1>
-            <p>Share your experience with us</p>
-        </div>
 
-        <!-- Card -->
-        <div class="review-card">
-
-            @if (Model?.TourId != null)
-            {
-                <div class="tour-info-badge">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Tour ID: <strong>@Model.TourId</strong>
-                </div>
-            }
-
-            <form asp-action="CreateReview" method="post" novalidate id="reviewForm">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
-
-                <!-- Hidden Fields -->
-               
-                <input type="hidden" asp-for="TourId" value="@Model?.TourId" />
-
-                <!-- Full Name -->
-                <div class="mb-4">
-                    <label asp-for="NameSurname" class="form-label">
-                        <i class="bi bi-person-fill"></i> Full Name
-                    </label>
-                    <input asp-for="NameSurname"
-                           class="form-control"
-                           placeholder="Enter your full name"
-                           maxlength="100" />
-                    <span asp-validation-for="NameSurname" class="invalid-feedback d-block"></span>
-                </div>
-
-                <!-- Review Detail -->
-                <div class="mb-4">
-                    <label asp-for="Detail" class="form-label">
-                        <i class="bi bi-chat-quote-fill"></i> Review Details
-                    </label>
-                    <textarea asp-for="Detail"
-                              class="form-control"
-                              placeholder="Describe your tour experience in detail..."></textarea>
-                    <span asp-validation-for="Detail" class="invalid-feedback d-block"></span>
-                </div>
-
-                <!-- Rating (Stars) -->
-                <div class="mb-4">
-                    <div class="star-rating-label">
-                        <i class="bi bi-star-fill"></i> Your Rating
+            <div class="review-create-card">
+                @if (!string.IsNullOrEmpty(Model?.TourId))
+                {
+                    <div class="tour-review-info">
+                        <i class="icon-map-1"></i>
+                        <span>Tour ID: <strong>@Model.TourId</strong></span>
                     </div>
-                    <div class="star-rating-wrapper">
-                        <div class="star-rating" id="starRating">
-                            <input type="radio" asp-for="Score" id="star5" value="5" />
-                            <label for="star5" title="Excellent">&#9733;</label>
-                            <input type="radio" asp-for="Score" id="star4" value="4" />
-                            <label for="star4" title="Very Good">&#9733;</label>
-                            <input type="radio" asp-for="Score" id="star3" value="3" />
-                            <label for="star3" title="Good">&#9733;</label>
-                            <input type="radio" asp-for="Score" id="star2" value="2" />
-                            <label for="star2" title="Average">&#9733;</label>
-                            <input type="radio" asp-for="Score" id="star1" value="1" />
-                            <label for="star1" title="Poor">&#9733;</label>
+                }
+
+                <form asp-action="CreateReview" method="post" novalidate id="reviewForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                    <input type="hidden" asp-for="TourId" value="@Model?.TourId" />
+
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label asp-for="NameSurname" class="form-label-modern">
+                                Full Name
+                            </label>
+                            <input asp-for="NameSurname"
+                                   class="form-control-modern"
+                                   placeholder="Enter your full name"
+                                   maxlength="100" />
+                            <span asp-validation-for="NameSurname" class="validation-modern"></span>
                         </div>
-                        <span id="starScoreText" class="ms-2"></span>
+
+                        <div class="form-group full">
+                            <label asp-for="Detail" class="form-label-modern">
+                                Review Details
+                            </label>
+                            <textarea asp-for="Detail"
+                                      class="form-control-modern form-textarea-modern"
+                                      placeholder="Describe your experience with the tour..."></textarea>
+                            <span asp-validation-for="Detail" class="validation-modern"></span>
+                        </div>
+
+                        <div class="form-group full">
+                            <label class="form-label-modern">Your Rating</label>
+
+                            <div class="rating-box-modern">
+                                <div class="star-rating-modern" id="starRating">
+                                    <input type="radio" asp-for="Score" id="star5" value="5" />
+                                    <label for="star5" title="Excellent">&#9733;</label>
+
+                                    <input type="radio" asp-for="Score" id="star4" value="4" />
+                                    <label for="star4" title="Very Good">&#9733;</label>
+
+                                    <input type="radio" asp-for="Score" id="star3" value="3" />
+                                    <label for="star3" title="Good">&#9733;</label>
+
+                                    <input type="radio" asp-for="Score" id="star2" value="2" />
+                                    <label for="star2" title="Average">&#9733;</label>
+
+                                    <input type="radio" asp-for="Score" id="star1" value="1" />
+                                    <label for="star1" title="Poor">&#9733;</label>
+                                </div>
+
+                                <span id="starScoreText" class="rating-text-modern"></span>
+                            </div>
+
+                            <span asp-validation-for="Score" class="validation-modern"></span>
+                        </div>
                     </div>
-                    <span asp-validation-for="Score" class="invalid-feedback d-block"></span>
-                </div>
 
-                <hr class="section-divider" />
+                    <div class="review-form-footer">
+                        <a href="/Tour/TourDetail/@Model.TourId" class="btn-back-review">
+                            Back to Tour
+                        </a>
 
-                <!-- Review Date -->
-                <div class="mb-4">
-                    <label asp-for="ReviewDate" class="form-label">
-                        <i class="bi bi-calendar3"></i> Review Date
-                    </label>
-                    <input asp-for="ReviewDate"
-                           type="date"
-                           class="form-control"
-                           id="reviewDateInput" />
-                    <span asp-validation-for="ReviewDate" class="invalid-feedback d-block"></span>
-                </div>
-
-                <!-- Submit -->
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-submit">
-                        <i class="bi bi-send-fill me-2"></i> Submit Review
-                    </button>
-                </div>
-
-            </form>
+                        <button type="submit" class="btn-submit-review">
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+<style>
+    .review-create-page {
+        padding: 40px 0 90px;
+        background: radial-gradient(circle at top left, rgba(16,185,129,.08), transparent 28%), radial-gradient(circle at top right, rgba(37,99,235,.06), transparent 22%);
+    }
 
-    <script>
-        // Set today's date as default
-        (function () {
-            const dateInput = document.getElementById('reviewDateInput');
-            if (dateInput && !dateInput.value) {
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                dateInput.value = `${yyyy}-${mm}-${dd}`;
+    .review-create-shell {
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .review-create-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .review-create-badge {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(16,185,129,0.12);
+        color: #047857;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+
+    .review-create-title {
+        font-size: 42px;
+        line-height: 1.1;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #0f172a;
+    }
+
+    .review-create-subtitle {
+        max-width: 700px;
+        margin: 0 auto;
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .review-create-card {
+        background: #fff;
+        border-radius: 26px;
+        padding: 34px;
+        box-shadow: 0 18px 45px rgba(15,23,42,0.08);
+        border: 1px solid #eef2f7;
+    }
+
+    .tour-review-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #047857;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        border: 1px solid #a7f3d0;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-label-modern {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .form-control-modern {
+        width: 100%;
+        border: 1.5px solid #dbe3ee;
+        border-radius: 14px;
+        background: #f8fafc;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: #0f172a;
+        transition: all .2s ease;
+        outline: none;
+    }
+
+        .form-control-modern:focus {
+            border-color: #10b981;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.10);
+        }
+
+        .form-control-modern::placeholder {
+            color: #94a3b8;
+        }
+
+    .form-textarea-modern {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .rating-box-modern {
+        border: 1.5px solid #dbe3ee;
+        border-radius: 14px;
+        background: #f8fafc;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .star-rating-modern {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 6px;
+    }
+
+        .star-rating-modern input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating-modern label {
+            cursor: pointer;
+            font-size: 34px;
+            line-height: 1;
+            color: #d1d5db;
+            transition: .18s ease;
+        }
+
+            .star-rating-modern label:hover,
+            .star-rating-modern label:hover ~ label,
+            .star-rating-modern input:checked ~ label {
+                color: #f59e0b;
             }
-        })();
 
-        // Star rating text
-        const scoreLabels = {
-            1: '⭐ Poor',
-            2: '⭐⭐ Average',
-            3: '⭐⭐⭐ Good',
-            4: '⭐⭐⭐⭐ Very Good',
-            5: '⭐⭐⭐⭐⭐ Excellent'
-        };
+    .rating-text-modern {
+        font-size: 14px;
+        font-weight: 700;
+        color: #b45309;
+        min-width: 130px;
+    }
 
-        document.querySelectorAll('#starRating input[type="radio"]').forEach(function (radio) {
-            radio.addEventListener('change', function () {
-                const scoreText = document.getElementById('starScoreText');
-                scoreText.textContent = scoreLabels[this.value] || '';
-            });
+    .validation-modern {
+        display: block;
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .review-form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+    }
+
+    .btn-back-review {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 22px;
+        border-radius: 14px;
+        border: 1px solid #dbe3ee;
+        background: #fff;
+        color: #334155;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .btn-back-review:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+    .btn-submit-review {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 24px;
+        border-radius: 14px;
+        border: none;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: #fff;
+        font-weight: 800;
+        min-width: 180px;
+        box-shadow: 0 12px 28px rgba(16,185,129,0.24);
+        transition: .2s ease;
+    }
+
+        .btn-submit-review:hover {
+            transform: translateY(-2px);
+            color: #fff;
+            box-shadow: 0 16px 34px rgba(16,185,129,0.28);
+        }
+
+    @@media (max-width: 767px) {
+        .review-create-page {
+            padding: 24px 0 70px;
+        }
+
+        .review-create-title {
+            font-size: 30px;
+        }
+
+        .review-create-card {
+            padding: 22px;
+            border-radius: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .review-form-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-back-review,
+        .btn-submit-review {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    const scoreLabels = {
+        1: 'Poor',
+        2: 'Average',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+    };
+
+    document.querySelectorAll('#starRating input[type="radio"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            const scoreText = document.getElementById('starScoreText');
+            scoreText.textContent = scoreLabels[this.value] || '';
         });
-    </script>
-
-</body>
-</html>
+    });
+</script>

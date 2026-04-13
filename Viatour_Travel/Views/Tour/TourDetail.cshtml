@@ -270,6 +270,7 @@ else
                         </div>
 
                         <!-- Gallery -->
+                        <!-- Gallery -->
                         <div class="tab-pane fade" id="pills-shot-gallery" role="tabpanel">
                             <div class="content-card">
                                 <h3 class="section-title">@Localizer["Gallery"]</h3>
@@ -279,7 +280,8 @@ else
                                     <div class="gallery-content-tour custom-gallery-grid">
                                         @foreach (var item in images)
                                         {
-                                            <div class="image">
+                                            <div class="image gallery-click-item"
+                                                 data-image="@item.ImageUrl">
                                                 <img src="@item.ImageUrl"
                                                      alt="@Localizer["TourGalleryImage"]"
                                                      class="gallery-item-img">
@@ -293,7 +295,6 @@ else
                                 }
                             </div>
                         </div>
-
                         <!-- Map -->
                         <div class="tab-pane fade" id="pills-location-share" role="tabpanel">
                             <div class="content-card map-card-modern">
@@ -334,62 +335,30 @@ else
                         </div>
 
                         <!-- Reviews -->
+                        <!-- Reviews -->
                         <div class="tab-pane fade" id="pills-reviews" role="tabpanel">
-                            <div class="content-card">
-                                <h3 class="section-title">@Localizer["Reviews"]</h3>
-
-                                <div class="custom-review mb-50">
-                                    <div class="flex card-list">
-                                        <div class="card-review">
-                                            <div class="percent">
-                                                <svg>
-                                                    <circle cx="105" cy="105" r="100"></circle>
-                                                    <circle cx="105" cy="105" r="100"
-                                                            style="--percent:@(avgScore * 20)"></circle>
-                                                </svg>
-                                                <div class="number center">
-                                                    <span>@Localizer["OverallAverage"]</span>
-                                                    <h5 class="number-reating">@avgScore.ToString("0.0")</h5>
-                                                    <span>@Localizer["OutOf5"]</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="review-list">
-                                            <div class="review-list-item mb-40">
-                                                <span class="comfort">@Localizer["OverallScore"]</span>
-                                                <div class="flex-two">
-                                                    <span class="reating">@Localizer["Score"] @avgScore.ToString("0.0")</span>
-                                                    <div class="start">
-                                                        @for (int i = 0; i < 5; i++)
-                                                        {
-                                                            if (i < roundedAvgScore)
-                                                            {
-                                                                <i class="icon-Star"></i>
-                                                            }
-                                                            else
-                                                            {
-                                                                <i class="icon-Star" style="opacity:.3"></i>
-                                                            }
-                                                        }
-                                                    </div>
-                                                </div>
-
-                                                <div class="progress">
-                                                    <div class="progress-bar" style="width:@(avgScore * 20)%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="content-card review-card-modern">
+                                <div class="review-header-modern">
+                                    <div>
+                                        <h3 class="section-title mb-8">@Localizer["Reviews"]</h3>
+                                        <p class="review-subtitle-modern">
+                                            Read approved guest reviews for this tour and share your own experience.
+                                        </p>
                                     </div>
+
+                                    <a href="/Review/CreateReview?tourId=@Model.TourId" class="write-review-btn">
+                                        <i class="icon-Vector-51"></i> Write a Review
+                                    </a>
                                 </div>
 
-                                <div class="client-review mb-30">
-                                    <div class="flex-two mb-50 inner-header">
-                                        <h4 class="title-review">@Localizer["GuestReviews"]</h4>
-
-                                        <div class="client-review flex">
-                                            <span>@totalReview @Localizer["Review"]</span>
-                                            <div class="start">
+                                <div class="review-summary-box">
+                                    <div class="review-score-main">
+                                        <div class="score-circle">
+                                            <span>@avgScore.ToString("0.0")</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="score-title">Overall Rating</h5>
+                                            <div class="start mb-6">
                                                 @for (int i = 0; i < 5; i++)
                                                 {
                                                     if (i < roundedAvgScore)
@@ -398,29 +367,40 @@ else
                                                     }
                                                     else
                                                     {
-                                                        <i class="icon-Star" style="opacity:.3"></i>
+                                                        <i class="icon-Star" style="opacity:.25"></i>
                                                     }
                                                 }
                                             </div>
-                                            <span>(@avgScore.ToString("0.0") / 5)</span>
+                                            <p class="score-meta">
+                                                @totalReview approved review@(totalReview == 1 ? "" : "s")
+                                            </p>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="client-review-list">
-                                        @if (activeReviews.Any())
+                                <div class="review-list-modern">
+                                    @if (activeReviews.Any())
+                                    {
+                                        @foreach (var item in activeReviews)
                                         {
-                                            @foreach (var item in activeReviews)
-                                            {
-                                                <div class="client-review-item flex">
-                                                    <div class="avata">
-                                                        <img src="/assets/images/avata/avt-review.jpg" alt="@Localizer["ReviewerAvatar"]">
-                                                    </div>
+                                            var initials = string.Join("",
+                                            item.NameSurname.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                            .Take(2)
+                                            .Select(w => w[0].ToString().ToUpper()));
 
-                                                    <div class="content">
-                                                        <span class="name">@item.NameSurname</span>
-                                                        <p class="des">@item.Detail</p>
+                                            <div class="review-item-modern">
+                                                <div class="review-user-side">
+                                                    <div class="review-avatar-modern">@initials</div>
+                                                </div>
 
-                                                        <div class="start">
+                                                <div class="review-content-modern">
+                                                    <div class="review-top-line">
+                                                        <div>
+                                                            <h6 class="review-user-name">@item.NameSurname</h6>
+                                                            <span class="review-date-modern">@item.ReviewDate.ToString("dd MMM yyyy")</span>
+                                                        </div>
+
+                                                        <div class="review-stars-modern">
                                                             @for (int i = 0; i < 5; i++)
                                                             {
                                                                 if (i < item.Score)
@@ -429,22 +409,35 @@ else
                                                                 }
                                                                 else
                                                                 {
-                                                                    <i class="icon-Star" style="opacity:.3"></i>
+                                                                    <i class="icon-Star" style="opacity:.25"></i>
                                                                 }
                                                             }
-                                                            <span>@item.Score</span>
+                                                            <span class="review-score-number">@item.Score/5</span>
                                                         </div>
-
-                                                        <span class="date">@item.ReviewDate.ToString("dd MMM yyyy")</span>
                                                     </div>
+
+                                                    <p class="review-text-modern">
+                                                        @item.Detail
+                                                    </p>
                                                 </div>
-                                            }
+                                            </div>
                                         }
-                                        else
-                                        {
-                                            <p class="des">@Localizer["NoReviewsForThisTourYet"]</p>
-                                        }
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="empty-review-box">
+                                            <div class="empty-review-icon">
+                                                <i class="icon-favourite-1"></i>
+                                            </div>
+                                            <h5>No approved reviews yet</h5>
+                                            <p>
+                                                This tour does not have any approved reviews yet. Be the first one to share your experience.
+                                            </p>
+                                            <a href="/Review/CreateReview?tourId=@Model.TourId" class="write-review-btn">
+                                                Write the First Review
+                                            </a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -487,9 +480,274 @@ else
 
         </div>
     </section>
+    <div class="gallery-lightbox" id="galleryLightbox">
+        <span class="gallery-lightbox-close" id="galleryLightboxClose">&times;</span>
+        <img id="galleryLightboxImage" class="gallery-lightbox-image" src="" alt="Preview">
+    </div>
 }
 
 <style>
+    .gallery-click-item {
+        cursor: pointer;
+    }
+
+    .gallery-lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.88);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 30px;
+    }
+
+        .gallery-lightbox.show {
+            display: flex;
+        }
+
+    .gallery-lightbox-image {
+        max-width: 92vw;
+        max-height: 88vh;
+        object-fit: contain;
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        background: #fff;
+    }
+
+    .gallery-lightbox-close {
+        position: absolute;
+        top: 24px;
+        right: 30px;
+        font-size: 42px;
+        line-height: 1;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 300;
+    }
+
+        .gallery-lightbox-close:hover {
+            opacity: .8;
+        }
+    .review-card-modern {
+        padding: 30px;
+    }
+
+    .review-header-modern {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 26px;
+    }
+
+    .review-subtitle-modern {
+        color: #6b7280;
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .write-review-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #10b981;
+        color: #fff;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-weight: 700;
+        transition: .25s ease;
+    }
+
+        .write-review-btn:hover {
+            background: #059669;
+            color: #fff;
+        }
+
+    .review-summary-box {
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 20px;
+        padding: 20px 22px;
+        margin-bottom: 26px;
+    }
+
+    .review-score-main {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .score-circle {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 800;
+        box-shadow: 0 12px 24px rgba(16,185,129,0.25);
+    }
+
+    .score-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .score-meta {
+        margin: 0;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .mb-6 {
+        margin-bottom: 6px;
+    }
+
+    .review-list-modern {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .review-item-modern {
+        display: flex;
+        gap: 16px;
+        border: 1px solid #eef2f7;
+        border-radius: 18px;
+        padding: 18px;
+        background: #fff;
+        transition: .25s ease;
+    }
+
+        .review-item-modern:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+    .review-user-side {
+        flex-shrink: 0;
+    }
+
+    .review-avatar-modern {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .review-content-modern {
+        flex: 1;
+    }
+
+    .review-top-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 14px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .review-user-name {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0 0 4px;
+    }
+
+    .review-date-modern {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+
+    .review-stars-modern {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+        .review-stars-modern i {
+            color: #f59e0b;
+        }
+
+    .review-score-number {
+        margin-left: 6px;
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 600;
+    }
+
+    .review-text-modern {
+        margin: 0;
+        color: #4b5563;
+        line-height: 1.8;
+        font-size: 14px;
+    }
+
+    .empty-review-box {
+        text-align: center;
+        padding: 40px 24px;
+        border: 2px dashed #dbeafe;
+        border-radius: 20px;
+        background: #f8fbff;
+    }
+
+    .empty-review-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #e0f2fe;
+        color: #0284c7;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .empty-review-box h5 {
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .empty-review-box p {
+        max-width: 520px;
+        margin: 0 auto 18px;
+        color: #6b7280;
+        line-height: 1.8;
+    }
+
+   @@media (max-width: 767px) {
+        .review-card-modern
+
+    {
+        padding: 22px;
+    }
+
+    .review-item-modern {
+        flex-direction: column;
+    }
+
+    .review-top-line {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    }
     .style-modern {
         padding: 30px 0 80px;
     }
@@ -910,3 +1168,56 @@ else
         }
     }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get("tab");
+
+        if (tab === "reviews") {
+            const reviewTabButton = document.getElementById("pills-reviews-tab");
+            if (reviewTabButton) {
+                reviewTabButton.click();
+
+                const reviewSection = document.getElementById("pills-reviews");
+                if (reviewSection) {
+                    setTimeout(() => {
+                        reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 150);
+                }
+            }
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const lightbox = document.getElementById("galleryLightbox");
+        const lightboxImage = document.getElementById("galleryLightboxImage");
+        const lightboxClose = document.getElementById("galleryLightboxClose");
+        const galleryItems = document.querySelectorAll(".gallery-click-item");
+
+        galleryItems.forEach(item => {
+            item.addEventListener("click", function () {
+                const imageUrl = this.getAttribute("data-image");
+                lightboxImage.src = imageUrl;
+                lightbox.classList.add("show");
+            });
+        });
+
+        lightboxClose.addEventListener("click", function () {
+            lightbox.classList.remove("show");
+            lightboxImage.src = "";
+        });
+
+        lightbox.addEventListener("click", function (e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove("show");
+                lightboxImage.src = "";
+            }
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                lightbox.classList.remove("show");
+                lightboxImage.src = "";
+            }
+        });
+    });
+</script>

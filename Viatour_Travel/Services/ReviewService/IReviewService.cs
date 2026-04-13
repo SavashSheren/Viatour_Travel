@@ -4,11 +4,11 @@ namespace Viatour_Travel.Services.ReviewService
 {
     public interface IReviewService
     {
-        Task<List<ResultReviewDto>> GetAllReviewAsync();
         Task CreateReviewAsync(CreateReviewDto createReviewDto);
-        Task UpdateReviewAsync(UpdateReviewDto updateReviewDto);
-        Task DeleteReviewAsync(String id);
-        Task<GetReviewById> GetReviewById(string id);
-        Task<List<ResultReviewByTourIdDto>> GetAllReviewsByTourIdAsync(string id);
+        Task<List<ResultReviewDto>> GetAllReviewsAsync();
+        Task<List<ResultReviewByTourIdDto>> GetAllReviewsByTourIdAsync(string tourId);
+        Task<GetReviewByIdDto?> GetReviewByIdAsync(string reviewId);
+        Task ApproveReviewAsync(string reviewId);
+        Task DeleteReviewAsync(string reviewId);
     }
 }
