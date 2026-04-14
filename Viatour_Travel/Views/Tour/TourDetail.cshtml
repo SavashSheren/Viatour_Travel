@@ -4,6 +4,7 @@
 @inject IStringLocalizer<Viatour_Travel.SharedResource> Localizer
 
 @{
+
     ViewData["Title"] = Localizer["TourDetail"];
     Layout = "~/Views/Shared/_TourLayout.cshtml";
 
@@ -471,7 +472,10 @@ else
                                     </li>
                                 </ul>
 
-                                <a href="#" class="booking-btn">@Localizer["MakeReservation"]</a>
+                                <a href="/Reservation/CreateReservation?tourId=@Model.TourId&tourTitle=@Model.TourTitle&tourImageUrl=@coverImage"
+                                   class="booking-btn">
+                                    @Localizer["MakeReservation"]
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -480,6 +484,30 @@ else
 
         </div>
     </section>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="reservation-success-modal" id="reservationSuccessModal">
+            <div class="reservation-success-backdrop"></div>
+
+            <div class="reservation-success-dialog">
+                <button type="button" class="reservation-success-close" id="reservationSuccessClose">&times;</button>
+
+                <div class="reservation-success-icon">
+                    <i class="icon-Vector-51"></i>
+                </div>
+
+                <h3 class="reservation-success-title">Reservation Request Received</h3>
+
+                <p class="reservation-success-text">
+                    @TempData["SuccessMessage"]
+                </p>
+
+                <button type="button" class="reservation-success-btn" id="reservationSuccessOk">
+                    Okay
+                </button>
+            </div>
+        </div>
+    }
     <div class="gallery-lightbox" id="galleryLightbox">
         <span class="gallery-lightbox-close" id="galleryLightboxClose">&times;</span>
         <img id="galleryLightboxImage" class="gallery-lightbox-image" src="" alt="Preview">
@@ -487,6 +515,129 @@ else
 }
 
 <style>
+    .reservation-success-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .reservation-success-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(4px);
+    }
+
+    .reservation-success-dialog {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border-radius: 24px;
+        padding: 34px 28px 28px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+        text-align: center;
+        animation: reservationModalIn .28s ease;
+    }
+
+    @@keyframes reservationModalIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(14px) scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    }
+
+    .reservation-success-close {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        border: none;
+        background: transparent;
+        font-size: 32px;
+        line-height: 1;
+        color: #94a3b8;
+        cursor: pointer;
+    }
+
+        .reservation-success-close:hover {
+            color: #0f172a;
+        }
+
+    .reservation-success-icon {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        font-size: 30px;
+        box-shadow: 0 16px 35px rgba(16,185,129,0.28);
+    }
+
+    .reservation-success-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 12px;
+    }
+
+    .reservation-success-text {
+        font-size: 15px;
+        line-height: 1.8;
+        color: #64748b;
+        margin: 0 0 24px;
+    }
+
+    .reservation-success-btn {
+        min-width: 160px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: #fff;
+        font-weight: 800;
+        padding: 14px 24px;
+        cursor: pointer;
+        box-shadow: 0 14px 28px rgba(16,185,129,0.24);
+        transition: .2s ease;
+    }
+
+        .reservation-success-btn:hover {
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 767px) {
+        .reservation-success-dialog
+
+    {
+        padding: 28px 20px 22px;
+        border-radius: 20px;
+    }
+
+    .reservation-success-title {
+        font-size: 22px;
+    }
+
+    .reservation-success-text {
+        font-size: 14px;
+    }
+
+    }
     .gallery-click-item {
         cursor: pointer;
     }
@@ -1219,5 +1370,32 @@ else
                 lightboxImage.src = "";
             }
         });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const successModal = document.getElementById("reservationSuccessModal");
+        const successClose = document.getElementById("reservationSuccessClose");
+        const successOk = document.getElementById("reservationSuccessOk");
+
+        if (successModal) {
+            function closeReservationModal() {
+                successModal.style.display = "none";
+            }
+
+            successClose?.addEventListener("click", closeReservationModal);
+            successOk?.addEventListener("click", closeReservationModal);
+
+            successModal.addEventListener("click", function (e) {
+                if (e.target.classList.contains("reservation-success-backdrop")) {
+                    closeReservationModal();
+                }
+            });
+
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeReservationModal();
+                }
+            });
+        }
     });
 </script>

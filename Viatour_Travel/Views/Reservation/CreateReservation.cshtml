@@ -1,0 +1,286 @@
+﻿@model Viatour_Travel.Dtos.ReservationDtos.CreateReservationDto
+
+@{
+    ViewData["Title"] = "Make a Reservation";
+    Layout = "~/Views/Shared/_TourLayout.cshtml";
+}
+
+<section class="reservation-create-page">
+    <div class="tf-container">
+        <div class="reservation-shell">
+            <div class="reservation-header">
+                <span class="reservation-badge">BOOK YOUR TOUR</span>
+                <h1 class="reservation-title">Make a Reservation</h1>
+                <p class="reservation-subtitle">
+                    Complete the form below. Your request will be reviewed by our team before final confirmation.
+                </p>
+            </div>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+
+            <div class="reservation-card">
+                <div class="tour-summary-box">
+                    <img src="@Model.TourImageUrl" alt="@Model.TourTitle" class="tour-summary-image" />
+                    <div>
+                        <h4 class="tour-summary-title">@Model.TourTitle</h4>
+                        <p class="tour-summary-id">Tour ID: @Model.TourId</p>
+                    </div>
+                </div>
+
+                <form asp-action="CreateReservation" method="post">
+                    <input type="hidden" asp-for="TourId" />
+                    <input type="hidden" asp-for="TourTitle" />
+                    <input type="hidden" asp-for="TourImageUrl" />
+
+                    <div class="reservation-grid">
+                        <div class="form-group">
+                            <label class="form-label-modern">Full Name</label>
+                            <input asp-for="NameSurname" class="form-control-modern" placeholder="Enter your full name" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-modern">Email Address</label>
+                            <input asp-for="Email" class="form-control-modern" placeholder="Enter your email address" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-modern">Phone Number</label>
+                            <input asp-for="Phone" class="form-control-modern" placeholder="Enter your phone number" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-modern">Person Count</label>
+                            <input asp-for="PersonCount" type="number" min="1" class="form-control-modern" />
+                        </div>
+
+                        <div class="form-group full">
+                            <label class="form-label-modern">Travel Date</label>
+                            <input asp-for="TravelDate" type="date" class="form-control-modern" />
+                        </div>
+
+                        <div class="form-group full">
+                            <label class="form-label-modern">Note</label>
+                            <textarea asp-for="Note" class="form-control-modern form-textarea-modern" placeholder="Write an optional note..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="reservation-footer">
+                        <a href="/Tour/TourDetail/@Model.TourId" class="btn-back-reservation">Back to Tour</a>
+                        <button type="submit" class="btn-submit-reservation">Submit Reservation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .reservation-create-page {
+        padding: 40px 0 90px;
+        background: radial-gradient(circle at top left, rgba(16,185,129,.08), transparent 28%), radial-gradient(circle at top right, rgba(37,99,235,.06), transparent 22%);
+    }
+
+    .reservation-shell {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .reservation-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .reservation-badge {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37,99,235,0.12);
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+
+    .reservation-title {
+        font-size: 42px;
+        line-height: 1.1;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #0f172a;
+    }
+
+    .reservation-subtitle {
+        max-width: 700px;
+        margin: 0 auto;
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .reservation-card {
+        background: #fff;
+        border-radius: 26px;
+        padding: 34px;
+        box-shadow: 0 18px 45px rgba(15,23,42,0.08);
+        border: 1px solid #eef2f7;
+    }
+
+    .tour-summary-box {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 16px;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 18px;
+        margin-bottom: 24px;
+    }
+
+    .tour-summary-image {
+        width: 110px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 12px;
+        flex-shrink: 0;
+    }
+
+    .tour-summary-title {
+        margin: 0 0 6px;
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .tour-summary-id {
+        margin: 0;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .reservation-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-label-modern {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .form-control-modern {
+        width: 100%;
+        border: 1.5px solid #dbe3ee;
+        border-radius: 14px;
+        background: #f8fafc;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: #0f172a;
+        transition: all .2s ease;
+        outline: none;
+    }
+
+        .form-control-modern:focus {
+            border-color: #10b981;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.10);
+        }
+
+    .form-textarea-modern {
+        min-height: 140px;
+        resize: vertical;
+    }
+
+    .reservation-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+    }
+
+    .btn-back-reservation {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 22px;
+        border-radius: 14px;
+        border: 1px solid #dbe3ee;
+        background: #fff;
+        color: #334155;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+    .btn-submit-reservation {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 24px;
+        border-radius: 14px;
+        border: none;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: #fff;
+        font-weight: 800;
+        min-width: 200px;
+        box-shadow: 0 12px 28px rgba(16,185,129,0.24);
+        transition: .2s ease;
+    }
+
+        .btn-submit-reservation:hover {
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+    @@media (max-width: 767px) {
+        .reservation-title {
+            font-size: 30px;
+        }
+
+        .reservation-card {
+            padding: 22px;
+        }
+
+        .reservation-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tour-summary-box {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tour-summary-image {
+            width: 100%;
+            height: 180px;
+        }
+
+        .reservation-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-back-reservation,
+        .btn-submit-reservation {
+            width: 100%;
+        }
+    }
+</style>

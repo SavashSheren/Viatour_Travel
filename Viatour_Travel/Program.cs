@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Reflection;
 using Viatour_Travel.Services.CategoryService;
+using Viatour_Travel.Services.ReservationService;
 using Viatour_Travel.Services.ReviewService;
 using Viatour_Travel.Services.TourImageService;
 using Viatour_Travel.Services.TourPlanServices;
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ITourPlanService, TourPlanManager>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<ITourImageService, TourImageService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

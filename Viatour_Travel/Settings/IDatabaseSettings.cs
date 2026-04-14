@@ -9,6 +9,7 @@
         string TourPlanCollectionName { get; set; }
         public string CategoryCollectionName { get; set; }
         public string ReviewCollectionName { get; set; }
+        public string ReservationCollectionName { get; set; } 
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Viatour_Travel.Dtos.CategoryDtos;
+using Viatour_Travel.Dtos.ReservationDtos;
 using Viatour_Travel.Dtos.ReviewDtos;
 using Viatour_Travel.Dtos.TourDtos;
 using Viatour_Travel.Dtos.TourImageDtos;
@@ -31,6 +32,10 @@ namespace Viatour_Travel.Mapping
             CreateMap<GetTourByIdDto, UpdateTourDto>().ReverseMap();
             CreateMap<TourImage, ResultTourImageDto>().ReverseMap();
             CreateMap<TourImage, CreateTourImageDto>().ReverseMap();
+
+            CreateMap<Reservation, CreateReservationDto>().ReverseMap();
+            CreateMap<Reservation, ResultReservationDto>().ReverseMap();
+            CreateMap<Reservation, GetReservationByIdDto>().ReverseMap();
         }
     }
 }
