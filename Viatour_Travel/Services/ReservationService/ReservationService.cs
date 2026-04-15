@@ -15,6 +15,7 @@ namespace Viatour_Travel.Services.ReservationService
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
             var database = client.GetDatabase(databaseSettings.DatabaseName);
+
             _reservationCollection = database.GetCollection<Reservation>(databaseSettings.ReservationCollectionName);
             _mapper = mapper;
         }
@@ -39,7 +40,7 @@ namespace Viatour_Travel.Services.ReservationService
             return _mapper.Map<List<ResultReservationDto>>(values);
         }
 
-        public async Task<GetReservationByIdDto?> GetReservationByIdAsync(string reservationId)
+        public async Task<ResultReservationDto?> GetReservationByIdAsync(string reservationId)
         {
             var value = await _reservationCollection
                 .Find(x => x.ReservationId == reservationId)
@@ -50,7 +51,17 @@ namespace Viatour_Travel.Services.ReservationService
                 return null;
             }
 
-            return _mapper.Map<GetReservationByIdDto>(value);
+            return _mapper.Map<ResultReservationDto>(value);
+        }
+
+        public async Task<List<ResultReservationDto>> GetReservationsByTourIdAsync(string tourId)
+        {
+            var values = await _reservationCollection
+                .Find(x => x.TourId == tourId)
+                .SortByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            return _mapper.Map<List<ResultReservationDto>>(values);
         }
 
         public async Task ApproveReservationAsync(string reservationId)
@@ -65,6 +76,5 @@ namespace Viatour_Travel.Services.ReservationService
         {
             await _reservationCollection.DeleteOneAsync(x => x.ReservationId == reservationId);
         }
-
     }
 }

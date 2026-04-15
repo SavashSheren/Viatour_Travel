@@ -8,44 +8,74 @@ namespace Viatour_Travel.Services.CategoryService
 {
     public class CategoryService : ICategoryService
     {
-
-        private readonly IMapper _mapper;
         private readonly IMongoCollection<Category> _categoryCollection;
-        public CategoryService(IMapper mapper , IDatabaseSettings _databaseSettings)
+        private readonly IMapper _mapper;
+
+        public CategoryService(IMapper mapper, IDatabaseSettings databaseSettings)
         {
-            var client = new MongoClient(_databaseSettings.ConnectionString);
-            var database = client.GetDatabase(_databaseSettings.DatabaseName);
-            _categoryCollection = database.GetCollection<Category>(_databaseSettings.CategoryCollectionName);
+            var client = new MongoClient(databaseSettings.ConnectionString);
+            var database = client.GetDatabase(databaseSettings.DatabaseName);
+
+            _categoryCollection = database.GetCollection<Category>(databaseSettings.CategoryCollectionName);
             _mapper = mapper;
         }
 
-        public async Task CreateCategoryAsync(CreateCategoryDtos createCategoryDto)
+        public async Task<List<ResultCategoryDto>> GetAllCategoryAsync()
+        {
+            var values = await _categoryCollection
+                .Find(x => true)
+                .SortByDescending(x => x.CategoryId)
+                .ToListAsync();
+
+            return _mapper.Map<List<ResultCategoryDto>>(values);
+        }
+
+        public async Task<CreateCategoryDto?> GetCategoryByIdForCreateAsync(string id)
+        {
+            var value = await _categoryCollection
+                .Find(x => x.CategoryId == id)
+                .FirstOrDefaultAsync();
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<CreateCategoryDto>(value);
+        }
+
+        public async Task<UpdateCategoryDto?> GetCategoryByIdAsync(string id)
+        {
+            var value = await _categoryCollection
+                .Find(x => x.CategoryId == id)
+                .FirstOrDefaultAsync();
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<UpdateCategoryDto>(value);
+        }
+
+        public async Task CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
             var value = _mapper.Map<Category>(createCategoryDto);
             await _categoryCollection.InsertOneAsync(value);
         }
 
-        public async Task DeleteCategoryDto(string id)
-        {
-            await _categoryCollection.DeleteOneAsync(x => x.CategoryId == id);
-        }
-
-        public async Task<List<ResultCategoryDto>> GetAllCategoryAsync()
-        {
-            var Value = await _categoryCollection.Find(x => true).ToListAsync();
-            return _mapper.Map<List<ResultCategoryDto>>(Value);
-        }
-
-        public  async Task<GetCategoryByIdDto> getCategoryByIdDto(string id)
-        {
-            var value = await _categoryCollection.Find(x => x.CategoryId == id).FirstOrDefaultAsync();
-            return _mapper.Map<GetCategoryByIdDto>(value);
-        }
-
         public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
         {
             var value = _mapper.Map<Category>(updateCategoryDto);
-            await _categoryCollection.FindOneAndReplaceAsync(x => x.CategoryId == updateCategoryDto.CategoryId, value);
+
+            await _categoryCollection.FindOneAndReplaceAsync(
+                x => x.CategoryId == updateCategoryDto.CategoryId,
+                value);
+        }
+
+        public async Task DeleteCategoryAsync(string id)
+        {
+            await _categoryCollection.DeleteOneAsync(x => x.CategoryId == id);
         }
     }
 }

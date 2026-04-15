@@ -32,7 +32,8 @@ namespace Viatour_Travel.Services.ReviewService
         {
             var values = await _reviewCollection
                 .Find(x => true)
-                .SortByDescending(x => x.ReviewDate)
+                .SortBy(x => x.Status)
+                .ThenByDescending(x => x.ReviewDate)
                 .ToListAsync();
 
             return _mapper.Map<List<ResultReviewDto>>(values);

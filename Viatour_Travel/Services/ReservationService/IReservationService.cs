@@ -6,7 +6,8 @@ namespace Viatour_Travel.Services.ReservationService
     {
         Task CreateReservationAsync(CreateReservationDto createReservationDto);
         Task<List<ResultReservationDto>> GetAllReservationsAsync();
-        Task<GetReservationByIdDto?> GetReservationByIdAsync(string reservationId);
+        Task<ResultReservationDto?> GetReservationByIdAsync(string reservationId);
+        Task<List<ResultReservationDto>> GetReservationsByTourIdAsync(string tourId);
         Task ApproveReservationAsync(string reservationId);
         Task DeleteReservationAsync(string reservationId);
     }

@@ -20,9 +20,10 @@ namespace Viatour_Travel.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 TempData["ErrorMessage"] = "Review id is required.";
                 return RedirectToAction(nameof(Index));
@@ -34,9 +35,10 @@ namespace Viatour_Travel.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 TempData["ErrorMessage"] = "Review id is required.";
                 return RedirectToAction(nameof(Index));

@@ -81,19 +81,38 @@
                     }
 
                     <div class="rev-actions">
+                        <a asp-action="ExportExcel"
+                           asp-route-tourId="@item.TourId"
+                           class="btn-export-report btn-export-excel">
+                            Export Excel
+                        </a>
+
+                        <a asp-action="ExportPdf"
+                           asp-route-tourId="@item.TourId"
+                           class="btn-export-report btn-export-pdf">
+                            Export PDF
+                        </a>
+
                         @if (!item.Status)
                         {
-                            <form method="post" action="/AdminReservation/Approve">
-                                <input type="hidden" name="id" value="@item.ReservationId" />
-                                <button type="submit" class="btn btn-approve">✔ Approve</button>
+                            <form method="post"
+                                  asp-action="Approve"
+                                  asp-route-id="@item.ReservationId"
+                                  class="action-form">
+                                <button type="submit" class="btn-approve">
+                                    ✔ Approve
+                                </button>
                             </form>
                         }
 
                         <form method="post"
-                              action="/AdminReservation/Delete"
-                              onsubmit="return confirm('Are you sure you want to delete this reservation?')">
-                            <input type="hidden" name="id" value="@item.ReservationId" />
-                            <button type="submit" class="btn btn-delete">🗑 Delete</button>
+                              asp-action="Delete"
+                              asp-route-id="@item.ReservationId"
+                              class="action-form"
+                              onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                            <button type="submit" class="btn-delete">
+                                Delete
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -107,6 +126,43 @@
 </div>
 
 <style>
+    .action-form {
+        margin: 0;
+    }
+
+    .btn-export-report,
+    .btn-approve,
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-export-excel {
+        background: #ecfdf5;
+        color: #065f46;
+    }
+
+        .btn-export-excel:hover {
+            background: #d1fae5;
+        }
+
+    .btn-export-pdf {
+        background: #fef2f2;
+        color: #991b1b;
+    }
+
+        .btn-export-pdf:hover {
+            background: #fee2e2;
+        }
     .rev-wrap {
         padding: 1.5rem;
         font-family: inherit;

@@ -1,9 +1,8 @@
 ﻿namespace Viatour_Travel.Dtos.CategoryDtos
 {
-    public class CreateCategoryDtos
+    public class CreateCategoryDto
     {
-        public String CategoryId { get; set; }
-        public String CategoryName { get; set; }
+        public string CategoryName { get; set; } = null!;
         public bool CategoryStatus { get; set; }
     }
 }

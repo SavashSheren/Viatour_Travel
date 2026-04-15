@@ -1,0 +1,749 @@
+﻿@model Viatour_Travel.Dtos.DashboardDtos.ResultDashboardDto
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminTourLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .dash-root {
+            padding: 32px;
+            background: #f5f7fb;
+            min-height: 100vh;
+        }
+
+        .dash-hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            padding: 32px;
+            margin-bottom: 24px;
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.35), transparent 30%), radial-gradient(circle at left bottom, rgba(14, 165, 233, 0.22), transparent 30%), linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%);
+            color: #fff;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.22);
+        }
+
+        .dash-hero-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .dash-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .3px;
+            margin-bottom: 18px;
+        }
+
+        .dash-title {
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 800;
+            margin: 0 0 10px;
+        }
+
+        .dash-subtitle {
+            font-size: 15px;
+            color: rgba(255,255,255,0.78);
+            max-width: 680px;
+            margin: 0 0 22px;
+        }
+
+        .dash-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .dash-primary-btn,
+        .dash-secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            padding: 13px 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .dash-primary-btn {
+            background: #fff;
+            color: #0f172a;
+        }
+
+            .dash-primary-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 12px 24px rgba(255,255,255,0.15);
+            }
+
+        .dash-secondary-btn {
+            color: #fff;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+            .dash-secondary-btn:hover {
+                background: rgba(255,255,255,0.16);
+            }
+
+        .dash-hero-side {
+            display: grid;
+            gap: 14px;
+        }
+
+        .dash-highlight-card {
+            border-radius: 22px;
+            padding: 20px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+        }
+
+        .dash-highlight-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .dash-highlight-value {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .dash-highlight-text {
+            font-size: 13px;
+            color: rgba(255,255,255,0.72);
+        }
+
+        .dash-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .dash-kpi-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+            transition: .2s ease;
+        }
+
+            .dash-kpi-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 16px 34px rgba(15, 23, 42, 0.09);
+            }
+
+        .dash-kpi-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 14px;
+        }
+
+        .bg-indigo {
+            background: #eef2ff;
+        }
+
+        .bg-cyan {
+            background: #ecfeff;
+        }
+
+        .bg-amber {
+            background: #fffbeb;
+        }
+
+        .bg-rose {
+            background: #fff1f2;
+        }
+
+        .dash-kpi-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .dash-kpi-value {
+            font-size: 34px;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .dash-kpi-note {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .dash-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .dash-panel {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .dash-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dash-panel-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .dash-panel-subtitle {
+            margin: 6px 0 0;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .dash-rate-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            height: 36px;
+            padding: 0 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .dash-progress {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            background: #eef2f7;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        .dash-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+
+        .fill-emerald {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+
+        .fill-indigo {
+            background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+        }
+
+        .dash-mini-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .dash-mini-stat {
+            background: #f9fafb;
+            border-radius: 18px;
+            padding: 16px;
+            border: 1px solid #eef2f7;
+        }
+
+        .dash-mini-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dash-mini-value {
+            font-size: 24px;
+            line-height: 1;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .dash-feed-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .dash-feed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .dash-feed-item {
+            border: 1px solid #edf2f7;
+            background: #fbfcfe;
+            border-radius: 18px;
+            padding: 16px;
+            transition: .2s ease;
+        }
+
+            .dash-feed-item:hover {
+                background: #fff;
+                box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+            }
+
+        .dash-feed-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .dash-feed-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .dash-feed-meta {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .dash-feed-text {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .dash-feed-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #fff7ed;
+            color: #9a3412;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .status-approved,
+        .status-pending {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 88px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .status-approved {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-pending {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .dash-empty {
+            border: 1px dashed #d1d5db;
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-align: center;
+            color: #6b7280;
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        .dash-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .dash-quick-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+            transition: .2s ease;
+        }
+
+            .dash-quick-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 16px 34px rgba(15, 23, 42, 0.09);
+            }
+
+        .dash-quick-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 14px;
+            background: #f3f4f6;
+        }
+
+        .dash-quick-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .dash-quick-text {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        @@media (max-width: 1200px) {
+            .dash-kpi-grid,
+            .dash-quick-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .dash-hero-grid,
+            .dash-overview-grid,
+            .dash-feed-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .dash-root {
+                padding: 20px;
+            }
+
+            .dash-title {
+                font-size: 28px;
+            }
+
+            .dash-kpi-grid,
+            .dash-quick-grid,
+            .dash-mini-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .dash-hero,
+            .dash-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+}
+
+<div class="dash-root">
+    <section class="dash-hero">
+        <div class="dash-hero-grid">
+            <div>
+                <div class="dash-badge">● Live Admin Overview</div>
+                <h1 class="dash-title">Run Viatour from one clean command center.</h1>
+                <p class="dash-subtitle">
+                    Track tours, categories, pending reviews and reservation pressure from a single modern dashboard.
+                    This screen is designed to surface action, not noise.
+                </p>
+
+                <div class="dash-hero-actions">
+                    <a asp-controller="AdminTour" asp-action="CreateTour" class="dash-primary-btn">+ Add New Tour</a>
+                    <a asp-controller="AdminReservation" asp-action="Index" class="dash-secondary-btn">Open Reservations</a>
+                </div>
+            </div>
+
+            <div class="dash-hero-side">
+                <div class="dash-highlight-card">
+                    <div class="dash-highlight-label">Action Required</div>
+                    <div class="dash-highlight-value">@Model.TotalActionRequiredCount</div>
+                    <div class="dash-highlight-text">Pending reservations and reviews waiting for admin action.</div>
+                </div>
+
+                <div class="dash-highlight-card">
+                    <div class="dash-highlight-label">Operational Snapshot</div>
+                    <div class="dash-highlight-text">
+                        @Model.PendingReservationCount pending reservations ·
+                        @Model.PendingReviewCount pending reviews ·
+                        @Model.TotalTourCount active dashboard entries
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dash-kpi-grid">
+        <div class="dash-kpi-card">
+            <div class="dash-kpi-icon bg-indigo">🧭</div>
+            <div class="dash-kpi-label">Total Tours</div>
+            <div class="dash-kpi-value">@Model.TotalTourCount</div>
+            <div class="dash-kpi-note">All listed tour records in the system.</div>
+        </div>
+
+        <div class="dash-kpi-card">
+            <div class="dash-kpi-icon bg-cyan">📁</div>
+            <div class="dash-kpi-label">Total Categories</div>
+            <div class="dash-kpi-value">@Model.TotalCategoryCount</div>
+            <div class="dash-kpi-note">Category structure available for tour organization.</div>
+        </div>
+
+        <div class="dash-kpi-card">
+            <div class="dash-kpi-icon bg-amber">💬</div>
+            <div class="dash-kpi-label">Pending Reviews</div>
+            <div class="dash-kpi-value">@Model.PendingReviewCount</div>
+            <div class="dash-kpi-note">Reviews waiting for moderation and approval.</div>
+        </div>
+
+        <div class="dash-kpi-card">
+            <div class="dash-kpi-icon bg-rose">🧾</div>
+            <div class="dash-kpi-label">Pending Reservations</div>
+            <div class="dash-kpi-value">@Model.PendingReservationCount</div>
+            <div class="dash-kpi-note">Reservations waiting for admin confirmation.</div>
+        </div>
+    </section>
+
+    <section class="dash-overview-grid">
+        <div class="dash-panel">
+            <div class="dash-panel-header">
+                <div>
+                    <h2 class="dash-panel-title">Reservation Status Overview</h2>
+                    <p class="dash-panel-subtitle">Approval performance across all reservation records.</p>
+                </div>
+                <div class="dash-rate-badge">@Model.ApprovedReservationRate%</div>
+            </div>
+
+            <div class="dash-progress">
+                <div class="dash-progress-fill fill-emerald" style="width:@Model.ApprovedReservationRate%;"></div>
+            </div>
+
+            <div class="dash-mini-stats">
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Total</div>
+                    <div class="dash-mini-value">@Model.TotalReservationCount</div>
+                </div>
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Approved</div>
+                    <div class="dash-mini-value">@Model.ApprovedReservationCount</div>
+                </div>
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Pending</div>
+                    <div class="dash-mini-value">@Model.PendingReservationCount</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dash-panel">
+            <div class="dash-panel-header">
+                <div>
+                    <h2 class="dash-panel-title">Review Status Overview</h2>
+                    <p class="dash-panel-subtitle">Moderation health across all customer reviews.</p>
+                </div>
+                <div class="dash-rate-badge">@Model.ApprovedReviewRate%</div>
+            </div>
+
+            <div class="dash-progress">
+                <div class="dash-progress-fill fill-indigo" style="width:@Model.ApprovedReviewRate%;"></div>
+            </div>
+
+            <div class="dash-mini-stats">
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Total</div>
+                    <div class="dash-mini-value">@Model.TotalReviewCount</div>
+                </div>
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Approved</div>
+                    <div class="dash-mini-value">@Model.ApprovedReviewCount</div>
+                </div>
+                <div class="dash-mini-stat">
+                    <div class="dash-mini-label">Pending</div>
+                    <div class="dash-mini-value">@Model.PendingReviewCount</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dash-feed-grid">
+        <div class="dash-panel">
+            <div class="dash-panel-header">
+                <div>
+                    <h2 class="dash-panel-title">Recent Reservations</h2>
+                    <p class="dash-panel-subtitle">Latest booking activity entering the system.</p>
+                </div>
+                <a asp-controller="AdminReservation" asp-action="Index" class="dash-secondary-btn" style="color:#111827;background:#f3f4f6;border:none;">View All</a>
+            </div>
+
+            @if (Model.RecentReservations.Any())
+            {
+                <div class="dash-feed-list">
+                    @foreach (var item in Model.RecentReservations)
+                    {
+                        <div class="dash-feed-item">
+                            <div class="dash-feed-top">
+                                <div>
+                                    <div class="dash-feed-name">@item.NameSurname</div>
+                                    <div class="dash-feed-meta">@item.TourTitle</div>
+                                </div>
+
+                                @if (item.Status)
+                                {
+                                    <span class="status-approved">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="status-pending">Pending</span>
+                                }
+                            </div>
+
+                            <div class="dash-feed-text">
+                                Reservation No: <strong>@item.ReservationNumber</strong><br />
+                                Travel Date: <strong>@item.TravelDate.ToString("dd.MM.yyyy")</strong> ·
+                                Person Count: <strong>@item.PersonCount</strong> ·
+                                Created: <strong>@item.CreatedDate.ToString("dd.MM.yyyy")</strong>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="dash-empty">
+                    No reservation activity found yet.
+                </div>
+            }
+        </div>
+
+        <div class="dash-panel">
+            <div class="dash-panel-header">
+                <div>
+                    <h2 class="dash-panel-title">Recent Reviews</h2>
+                    <p class="dash-panel-subtitle">Newest customer feedback waiting in the pipeline.</p>
+                </div>
+                <a asp-controller="AdminReview" asp-action="Index" class="dash-secondary-btn" style="color:#111827;background:#f3f4f6;border:none;">View All</a>
+            </div>
+
+            @if (Model.RecentReviews.Any())
+            {
+                <div class="dash-feed-list">
+                    @foreach (var item in Model.RecentReviews)
+                    {
+                        <div class="dash-feed-item">
+                            <div class="dash-feed-top">
+                                <div>
+                                    <div class="dash-feed-name">@item.NameSurname</div>
+                                    <div class="dash-feed-meta">@item.TourTitle · @item.ReviewDate.ToString("dd.MM.yyyy")</div>
+                                </div>
+
+                                <div class="dash-feed-score">★ @item.Score/5</div>
+                            </div>
+
+                            <div class="dash-feed-text" style="margin-bottom:10px;">
+                                @item.Detail
+                            </div>
+
+                            @if (item.Status)
+                            {
+                                <span class="status-approved">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="status-pending">Pending</span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="dash-empty">
+                    No review activity found yet.
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="dash-panel">
+        <div class="dash-panel-header">
+            <div>
+                <h2 class="dash-panel-title">Quick Actions</h2>
+                <p class="dash-panel-subtitle">Fast access to the most used admin operations.</p>
+            </div>
+        </div>
+
+        <div class="dash-quick-grid">
+            <a asp-controller="AdminTour" asp-action="CreateTour" class="dash-quick-card">
+                <div class="dash-quick-icon">➕</div>
+                <div class="dash-quick-title">Add Tour</div>
+                <div class="dash-quick-text">Create a new tour record and push it into operations.</div>
+            </a>
+
+            <a asp-controller="AdminCategory" asp-action="CreateCategory" class="dash-quick-card">
+                <div class="dash-quick-icon">📂</div>
+                <div class="dash-quick-title">Add Category</div>
+                <div class="dash-quick-text">Create a new category to keep tour structure clean.</div>
+            </a>
+
+            <a asp-controller="AdminReservation" asp-action="Index" class="dash-quick-card">
+                <div class="dash-quick-icon">🧾</div>
+                <div class="dash-quick-title">Reservations</div>
+                <div class="dash-quick-text">Review booking pipeline and approve pending entries.</div>
+            </a>
+
+            <a asp-controller="AdminReview" asp-action="Index" class="dash-quick-card">
+                <div class="dash-quick-icon">💬</div>
+                <div class="dash-quick-title">Reviews</div>
+                <div class="dash-quick-text">Moderate customer reviews and publish approved ones.</div>
+            </a>
+
+            <a asp-controller="Home" asp-action="Index" class="dash-quick-card">
+                <div class="dash-quick-icon">🌐</div>
+                <div class="dash-quick-title">View Site</div>
+                <div class="dash-quick-text">Open the public-facing side and verify the live experience.</div>
+            </a>
+        </div>
+    </section>
+</div>

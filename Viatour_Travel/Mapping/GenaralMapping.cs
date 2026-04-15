@@ -12,8 +12,8 @@ namespace Viatour_Travel.Mapping
     {
         public GenaralMapping()
         {
-            CreateMap<Category, CreateCategoryDtos>().ReverseMap();
             CreateMap<Category, ResultCategoryDto>().ReverseMap();
+            CreateMap<Category, CreateCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
             CreateMap<Category, GetCategoryByIdDto>().ReverseMap();
 

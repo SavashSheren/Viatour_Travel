@@ -11,6 +11,10 @@ using Viatour_Travel.Services.TourServices;
 using Viatour_Travel.Services.UploadService;
 using Viatour_Travel.Settings;
 using Viatour_Travel.Services.EmailService;
+using QuestPDF.Infrastructure;
+using Viatour_Travel.Services.ReservationReportService;
+using Viatour_Travel.Services.DashboardService;
+using Viatour_Travel.Services.AdminSearchService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,11 @@ builder.Services.AddScoped<ITourImageService, TourImageService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IEmailService, MailKitEmailService>();
+builder.Services.AddScoped<IReservationReportService, ReservationReportService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IAdminSearchService, AdminSearchService>();
+
+
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -41,6 +50,7 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
+QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
 
