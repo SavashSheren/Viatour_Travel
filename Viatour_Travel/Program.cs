@@ -10,6 +10,7 @@ using Viatour_Travel.Services.TourPlanServices;
 using Viatour_Travel.Services.TourServices;
 using Viatour_Travel.Services.UploadService;
 using Viatour_Travel.Settings;
+using Viatour_Travel.Services.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddScoped<ITourPlanService, TourPlanManager>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<ITourImageService, TourImageService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddScoped<IEmailService, MailKitEmailService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

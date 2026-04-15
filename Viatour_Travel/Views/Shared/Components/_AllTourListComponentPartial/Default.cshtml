@@ -89,13 +89,24 @@
                                     </a>
                                 </h3>
 
+                                @{
+                                    var roundedScore = (int)Math.Round(item.AverageScore);
+                                }
+
                                 <div class="review">
-                                    <i class="icon-Star"></i>
-                                    <i class="icon-Star"></i>
-                                    <i class="icon-Star"></i>
-                                    <i class="icon-Star"></i>
-                                    <i class="icon-Star"></i>
-                                    <span>(1 @Localizer["Review"])</span>
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        if (i < roundedScore)
+                                        {
+                                            <i class="icon-Star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon-Star" style="opacity:.3"></i>
+                                        }
+                                    }
+
+                                    <span>(@item.ReviewCount @(item.ReviewCount == 1 ? Localizer["Review"] : Localizer["Reviews"]))</span>
                                 </div>
 
                                 <div class="icon-box flex-three">

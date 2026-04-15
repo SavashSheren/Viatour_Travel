@@ -94,12 +94,38 @@ namespace Viatour_Travel.Services.TourServices
 
             var mappedTours = _mapper.Map<List<ResultTourDto>>(tours);
 
+            foreach (var item in mappedTours)
+            {
+                var approvedReviews = await _reviewCollection
+                    .Find(x => x.TourId == item.TourId && x.Status)
+                    .ToListAsync();
+
+                item.ReviewCount = approvedReviews.Count;
+                item.AverageScore = approvedReviews.Any()
+                    ? approvedReviews.Average(x => x.Score)
+                    : 0;
+            }
+
             return (mappedTours, totalCount);
         }
         public async Task<List<ResultTourDto>> GetAllTourAsync()
         {
             var values = await _tourCollection.Find(x => true).ToListAsync();
-            return _mapper.Map<List<ResultTourDto>>(values);
+            var mappedTours = _mapper.Map<List<ResultTourDto>>(values);
+
+            foreach (var item in mappedTours)
+            {
+                var approvedReviews = await _reviewCollection
+                    .Find(x => x.TourId == item.TourId && x.Status)
+                    .ToListAsync();
+
+                item.ReviewCount = approvedReviews.Count;
+                item.AverageScore = approvedReviews.Any()
+                    ? approvedReviews.Average(x => x.Score)
+                    : 0;
+            }
+
+            return mappedTours;
         }
 
         public async Task<GetTourByIdDto> GetTourByIdAsync(string id)
